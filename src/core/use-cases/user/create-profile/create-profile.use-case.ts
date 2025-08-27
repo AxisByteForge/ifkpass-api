@@ -14,17 +14,11 @@ export class CreateProfileUseCase {
     body,
   }: CreateProfileUseCaseRequest): Promise<CreateProfileUseCaseResponse> {
     const profile = Profile.create({
+      ...body,
       userId,
-      birthDate: body.birthDate,
-      city: body.city,
-      cpf: body.cpf,
-      dojo: body.dojo,
-      rank: body.rank,
-      sensei: body.sensei,
-      photoUrl: body.photoUrl,
     });
 
-    await this.userRepository.createProfile(userId, profile);
+    await this.userRepository.createProfile(profile);
 
     return right({
       message: 'Created',

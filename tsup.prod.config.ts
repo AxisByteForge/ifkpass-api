@@ -1,10 +1,10 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/presentation/handlers/**/index.ts'],
+  entry: ['src/infra/http/handlers/proxy/index.ts'],
   outDir: 'dist',
   format: ['esm'],
-  target: 'node20',
+  target: 'node22',
   platform: 'node',
   splitting: false,
   sourcemap: false,

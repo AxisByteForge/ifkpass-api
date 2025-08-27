@@ -1,7 +1,7 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 import { UnauthorizedError } from '../../../core/domain/errors/http-errors';
-import { Config } from '../../env/get-env';
+import { Config } from '../../../shared/common/config/env/get-env';
 
 const config = new Config();
 

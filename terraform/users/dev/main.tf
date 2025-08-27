@@ -1,5 +1,5 @@
-resource "aws_dynamodb_table" "profiles" {
-  name         = "profiles-${var.environment}"
+resource "aws_dynamodb_table" "users" {
+  name         = "users-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "userId"
 
@@ -33,7 +33,7 @@ resource "aws_dynamodb_table" "profiles" {
   }
 
   tags = {
-    Name        = "profiles-${var.environment}"
+    Name        = "users-${var.environment}"
     Environment = var.environment
   }
 

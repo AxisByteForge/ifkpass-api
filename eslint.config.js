@@ -67,6 +67,9 @@ export default [
         typescript: {
           alwaysTryTypes: true,
           project: './tsconfig.json',
+          node: {
+            extensions: ['.js', '.ts'],
+          },
         },
       },
     },

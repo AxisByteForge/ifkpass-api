@@ -1,0 +1,9 @@
+{
+  "body": "{\"name\":\"John\",\"lastName\":\"Doe\",\"email\":\"barretoruan1406@gmail.com\",\"isAdmin\":true,\"password\":\"ifkPass@Admin2025\"}",
+  "httpMethod": "POST",
+  "path": "/user",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "isBase64Encoded": false
+}

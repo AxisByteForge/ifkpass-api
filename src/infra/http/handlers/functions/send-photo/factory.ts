@@ -1,6 +1,6 @@
-import { SendPhotoUseCase } from '../../../../../core/application/use-cases/send-photo/send-photo.use-case';
+import { SendPhotoUseCase } from '../../../../../core/use-cases/user/send-photo/send-photo.use-case';
+import { Config } from '../../../../../shared/common/config/env/get-env';
 import { AwsS3Service } from '../../../../aws/aws-s3-client';
-import { Config } from '../../../../env/get-env';
 
 export function makeSendPhotoUseCase() {
   const s3Service = new AwsS3Service();

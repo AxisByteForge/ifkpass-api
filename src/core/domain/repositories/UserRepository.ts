@@ -8,5 +8,5 @@ export interface UserRepository {
     userId: string,
     isVerified: boolean,
   ): Promise<void>;
-  createProfile(userId: string, profileData: Profile): Promise<void>;
+  createProfile(profileData: Profile): Promise<void>;
 }

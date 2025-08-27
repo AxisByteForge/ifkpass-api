@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { StorageServiceAdapter } from '../../core/domain/adapters/aws/aws-s3-adapter';
-import { Config } from '../env/get-env';
+import { Config } from '../../shared/common/config/env/get-env';
 
 const config = new Config();
 

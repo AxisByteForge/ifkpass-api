@@ -8,7 +8,7 @@ import {
 import crypto from 'node:crypto';
 
 import { IdentityProviderServiceAdapter } from '../../core/domain/adapters/aws/aws-cognito-adapter';
-import { Config } from '../env/get-env';
+import { Config } from '../../shared/common/config/env/get-env';
 
 const config = new Config();
 

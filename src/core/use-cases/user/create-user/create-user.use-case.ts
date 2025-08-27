@@ -4,7 +4,7 @@ import {
 } from './create-user.use-case.interface';
 import { IdentityProviderServiceAdapter } from '../../../domain/adapters/aws/aws-cognito-adapter';
 import { left, right } from '../../../domain/either';
-import { User } from '../../../domain/entities/User.entity';
+import { Email, User } from '../../../domain/entities/User.entity';
 import { UserAlreadyExistsException } from '../../../domain/errors/user-already-exists-exception';
 import { UserRepository } from '../../../domain/repositories/UserRepository';
 
@@ -17,23 +17,25 @@ export class CreateUserUseCase {
   async execute({
     props,
   }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    const email = new Email(props.email);
+
     const userAlreadyExists = await this.userRepository.findByEmail(
-      props.email,
+      email.getValue(),
     );
 
     if (userAlreadyExists) {
-      return left(new UserAlreadyExistsException(props.email));
+      return left(new UserAlreadyExistsException(email.getValue()));
     }
 
-    await this.identityProvider.signUp(props.email, props.password);
-
-    const userId = await this.identityProvider.getUserId(props.email);
+    await this.identityProvider.signUp(email.getValue(), props.password);
+    const userId = await this.identityProvider.getUserId(email.getValue());
 
     const user = User.create({
       userId: userId ?? '',
       name: props.name,
       lastName: props.lastName,
-      email: props.email,
+      email,
+      isAdmin: props.isAdmin,
     });
 
     await this.userRepository.create(user);

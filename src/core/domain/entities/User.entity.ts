@@ -1,35 +1,62 @@
+export class Email {
+  private readonly value: string;
+
+  constructor(value: string) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+      throw new Error('invalid email');
+    }
+    this.value = value;
+  }
+
+  getValue(): string {
+    return this.value;
+  }
+}
+
 export interface UserProps {
   userId: string;
   name: string;
   lastName: string;
-  email: string;
+  email: Email;
+  isAdmin: boolean;
   createdAt: string;
+  updatedAt: string;
+  version: number;
 }
 
 export class User {
-  readonly userId: string;
-  readonly createdAt: string;
-  readonly name: string;
-  readonly lastName: string;
-  readonly email: string;
+  private props: UserProps;
 
   private constructor(props: UserProps) {
-    this.userId = props.userId;
-    this.createdAt = props.createdAt;
-    this.name = props.name;
-    this.lastName = props.lastName;
-    this.email = props.email;
+    this.props = props;
   }
 
-  static create(props: Omit<UserProps, 'createdAt'>): User {
+  static create(
+    props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'version'>,
+  ): User {
+    const now = new Date().toISOString();
     return new User({
       ...props,
-      createdAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
+      version: 1,
     });
   }
 
-  static fromPersistence(props: UserProps): User {
-    return new User(props);
+  static fromPersistence(props: {
+    userId: string;
+    name: string;
+    lastName: string;
+    email: string;
+    isAdmin: boolean;
+    createdAt: string;
+    updatedAt: string;
+    version: number;
+  }): User {
+    return new User({
+      ...props,
+      email: new Email(props.email),
+    });
   }
 
   static generateVerificationCode(length = 6): string {
@@ -38,13 +65,41 @@ export class User {
     return Math.floor(Math.random() * (max - min + 1) + min).toString();
   }
 
-  getProps(): UserProps {
-    return {
-      userId: this.userId,
-      createdAt: this.createdAt,
-      name: this.name,
-      lastName: this.lastName,
-      email: this.email,
-    };
+  promoteToAdmin(): void {
+    if (!this.props.isAdmin) {
+      this.props.isAdmin = true;
+      this.touch();
+    }
+  }
+
+  updateName(name: string, lastName: string): void {
+    this.props.name = name;
+    this.props.lastName = lastName;
+    this.touch();
+  }
+
+  private touch(): void {
+    this.props.updatedAt = new Date().toISOString();
+    this.props.version += 1;
+  }
+
+  getEmail(): string {
+    return this.props.email.getValue();
+  }
+
+  getId(): string {
+    return this.props.userId;
+  }
+
+  getFullName(): string {
+    return `${this.props.name} ${this.props.lastName}`;
+  }
+
+  getIsAdmin(): boolean {
+    return this.props.isAdmin;
+  }
+
+  getProps(): Readonly<UserProps> {
+    return Object.freeze({ ...this.props });
   }
 }

@@ -12,7 +12,7 @@
         "-f",
         "Proxy",
         "-p",
-        "${workspaceFolder}/.vscode/payloads/register-user-payload.json"
+        "${workspaceFolder}/.vscode/payloads/create-user-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",

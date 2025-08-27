@@ -1,12 +1,12 @@
-import { VerifyEmailUseCase } from '../../../../../core/application/use-cases/verify-email/verify-email.use-case';
+import { VerifyEmailUseCase } from '../../../../../core/use-cases/user/verify-email/verify-email.use-case';
 import { AwsCognitoService } from '../../../../aws/aws-cognito-client';
-import { DynamoUserRepository } from '../../../../database/user-repository.dynamo';
+import { DynamoUserRepository } from '../../../../database/dynamo/users-repository.dynamo';
 
 export function factory() {
-  const usersRepository = new DynamoUserRepository();
+  const profileRepository = new DynamoUserRepository();
   const cognitoService = new AwsCognitoService();
   const createUserUseCase = new VerifyEmailUseCase(
-    usersRepository,
+    profileRepository,
     cognitoService,
   );
   return createUserUseCase;

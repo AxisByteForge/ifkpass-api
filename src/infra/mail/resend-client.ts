@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-import { Config } from '../env/get-env';
+import { Config } from '../../shared/common/config/env/get-env';
 
 const config = new Config();
 const resend = new Resend(config.get('RESEND_MAIL_API_KEY'));

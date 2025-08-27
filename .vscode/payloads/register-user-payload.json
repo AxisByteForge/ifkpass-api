@@ -1,9 +1,0 @@
-{
-  "body": "{\"name\":\"John\",\"lastName\":\"Doe\",\"email\":\"barretoruan77@gmail.com\",\"password\":\"ifkPass@Admin2025\",\"cpf\":\"123.456.789-00\",\"birthDate\":\"1990-01-01\",\"city\":\"São Paulo\",\"dojo\":\"Dojo Central\"}",
-  "httpMethod": "POST",
-  "path": "/user",
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "isBase64Encoded": false
-}

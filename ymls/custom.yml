@@ -11,10 +11,6 @@ USERS_TABLE_NAME:
   dev: users-dev
   prd: users-prd
 
-PROFILES_TABLE_NAME:
-  dev: profiles-dev
-  prd: profiles-prd
-
 PROFILE_BUCKET_NAME:
   dev: ifkpass-profile-photos-dev
   prd: ifkpass-profile-photos-prd
