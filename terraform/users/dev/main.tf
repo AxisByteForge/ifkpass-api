@@ -38,3 +38,31 @@ resource "aws_dynamodb_table" "users" {
   }
 
 }
+
+resource "aws_dynamodb_table" "admins" {
+  name         = "admins-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "adminId"
+
+  # Chave primária
+  attribute {
+    name = "adminId"
+    type = "S"
+  }
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "email-index"
+    hash_key        = "email"
+    projection_type = "ALL"
+  }
+
+  tags = {
+    Name        = "admins-${var.environment}"
+    Environment = var.environment
+  }
+}

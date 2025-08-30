@@ -5,6 +5,12 @@ const logger = (
   response: Record<string, any>,
   error?: unknown,
 ): void => {
+  const body = JSON.parse(event.body || '{}');
+
+  if ('password' in body) {
+    body.password = '[REDACTED]';
+  }
+
   const logObject: {
     request: { body: any };
     response: Record<string, any>;
