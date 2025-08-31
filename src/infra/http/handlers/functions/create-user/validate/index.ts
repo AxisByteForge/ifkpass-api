@@ -5,5 +5,5 @@ export const registerValidate = z.object({
   lastName: z.string(),
   email: z.string().email(),
   password: z.string(),
-  isAdmin: z.boolean(),
+  isAdmin: z.boolean().optional(),
 });

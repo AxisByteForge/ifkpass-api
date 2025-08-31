@@ -34,6 +34,3 @@ export class AwsS3Service implements StorageServiceAdapter {
     };
   }
 }
-
-// certo: https://ifkpass-profile-photos.s3.us-east-1.amazonaws.com/users/e4e874d8-7051-70ab-6f0f-5dd7bbbe80b0/profile-photo.jpg
-// errado: https://ifkpass-profile-photos.s3.us-east-1.amazonaws.com/users/e4e874d8-7051-70ab-6f0f-5dd7bbbe80b0/profile-photo.jpg/

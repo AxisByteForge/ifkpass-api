@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-import { makeRegisterUseCase } from './factory';
+import { makeCreateAdminUseCase } from './factory';
 import { registerValidate } from './validate';
 import {
   BadRequestException,
@@ -24,7 +24,7 @@ async function createAdmin(event: APIGatewayProxyEvent) {
     };
   }
 
-  const useCase = makeRegisterUseCase();
+  const useCase = makeCreateAdminUseCase();
 
   const result = await useCase.execute({ props: parsed.data });
 

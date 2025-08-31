@@ -12,7 +12,7 @@ async function createProfile(event: APIGatewayProxyEvent) {
     const parsed = profileValidate.safeParse(body);
     const headers = event.headers as Partial<RequestHeaders>;
 
-    const userId = await verifyToken(headers.Authorization);
+    const { sub: userId } = await verifyToken(headers.Authorization);
 
     if (!parsed.success) {
       const { fieldErrors } = parsed.error.flatten();

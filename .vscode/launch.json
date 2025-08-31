@@ -27,6 +27,29 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug Lambda: CreateAdmin",
+      "program": "${workspaceFolder}/node_modules/.bin/sls",
+      "args": [
+        "invoke",
+        "local",
+        "-f",
+        "Proxy",
+        "-p",
+        "${workspaceFolder}/.vscode/payloads/create-admin-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug Lambda: VerifyEmail",
       "program": "${workspaceFolder}/node_modules/.bin/sls",
       "args": [

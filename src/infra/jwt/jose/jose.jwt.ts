@@ -13,10 +13,18 @@ const JWKS = createRemoteJWKSet(
   new URL(`${baseUrl}/${userPoolId}/.well-known/jwks.json`),
 );
 
-export async function verifyToken(authHeader?: string): Promise<string> {
+interface DecodedTokenResult {
+  sub: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+export async function verifyToken(
+  authHeader?: string,
+): Promise<DecodedTokenResult> {
   try {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new Error('Ivalid token');
+      throw new Error('Invalid token');
     }
 
     const token = authHeader.replace('Bearer ', '');
@@ -26,7 +34,12 @@ export async function verifyToken(authHeader?: string): Promise<string> {
       audience: clientId,
     });
 
-    return payload.sub ?? '';
+    const sub = payload.sub ?? '';
+    const email = payload.email as string;
+    const groups = payload['cognito:groups'] as string[] | undefined;
+    const isAdmin = groups?.includes('Admin') ?? false;
+
+    return { sub, email, isAdmin };
   } catch (err) {
     throw new UnauthorizedError(
       err instanceof Error ? err.message : 'Token inválido ou expirado',

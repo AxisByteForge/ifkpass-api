@@ -5,9 +5,9 @@ import { DynamoUserRepository } from '../../../../database/dynamo/users-reposito
 export function makeCreateAdminUseCase() {
   const adminRepository = new DynamoUserRepository();
   const cognitoService = new AwsCognitoService();
-  const createUserUseCase = new CreateUserUseCase(
+  const createAdminUseCase = new CreateUserUseCase(
     adminRepository,
     cognitoService,
   );
-  return createUserUseCase;
+  return createAdminUseCase;
 }
