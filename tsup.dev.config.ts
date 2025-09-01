@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/infra/http/handlers/proxy/index.ts'],
+  entry: ['src/proxy/index.ts'],
   outDir: 'dist',
   format: ['esm'],
   target: 'node22',
