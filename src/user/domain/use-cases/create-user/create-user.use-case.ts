@@ -33,9 +33,8 @@ export class CreateUserUseCase {
       return left(new UserAlreadyExistsException(email));
     }
     await Promise.all([
-      await this.identityProvider.signUp(userId, email, props.password),
-
-      await this.userRepository.create(user),
+      this.identityProvider.signUp(userId, email, props.password),
+      this.userRepository.create(user),
     ]);
 
     return right({

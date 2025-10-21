@@ -75,6 +75,21 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     return token;
   }
 
+  async isEmailVerified(email: string) {
+    const command = new AdminGetUserCommand({
+      Username: email,
+      UserPoolId: this.userPoolId,
+    });
+
+    const response = await this.client.send(command);
+
+    const emailVerified = response.UserAttributes?.find(
+      (attr) => attr.Name === 'email_verified',
+    )?.Value;
+
+    return emailVerified === 'true';
+  }
+
   async confirmEmail(userId: string, code: string) {
     const hash = this.generateSecretHash(this.secret, userId, this.clientId);
 

@@ -56,23 +56,6 @@ class DynamoUserRepository implements UserRepository {
     );
   }
 
-  public async updateEmailVerificationStatus(
-    userId: string,
-    isVerified: boolean,
-  ): Promise<void> {
-    await this.client.send(
-      new UpdateItemCommand({
-        TableName: this.tableName,
-        Key: { userId: { S: userId } },
-        UpdateExpression: 'SET isEmailVerified = :isVerified',
-        ExpressionAttributeValues: marshall({
-          ':isVerified': isVerified,
-        }),
-        ConditionExpression: 'attribute_exists(userId)',
-      }),
-    );
-  }
-
   public async createProfile(profile: Profile): Promise<void> {
     const props = profile.getProps();
 
