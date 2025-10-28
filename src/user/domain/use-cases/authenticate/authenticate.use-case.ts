@@ -5,6 +5,8 @@ import {
   AuthenticateUseCaseResponse,
 } from './authenticate.use-case.interface';
 import { UserIdentityProviderServiceAdapter } from '../../adapters/aws/aws-cognito-adapter';
+import { UserStatus } from '../../entities/User.entity';
+import { UserNotApprovedException } from '../../errors/user-not-approved-exception';
 import { UserNotFoundException } from '../../errors/user-not-found-exception';
 import { UserRepository } from '../../repositories/UserRepository';
 
@@ -22,6 +24,18 @@ export class AuthenticateUseCase {
 
     if (!user) {
       return left(new UserNotFoundException(email));
+    }
+
+    if (user.getStatus() === UserStatus.PENDING) {
+      return left(new UserNotApprovedException());
+    }
+
+    if (user.getStatus() === UserStatus.REJECTED) {
+      return left(
+        new Error(
+          'Sua conta foi rejeitada por um administrador. Entre em contato para mais informações.',
+        ),
+      );
     }
 
     const id = user.getId();

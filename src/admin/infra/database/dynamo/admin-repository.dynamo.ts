@@ -1,9 +1,10 @@
 import {
   PutItemCommand,
   QueryCommand,
+  GetItemCommand,
   DynamoDBClient,
 } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 import { Admin } from 'src/admin/domain/entities/Admin.entity';
 import { toDomain, toPersistence } from 'src/shared/utils/domain-mapper';
@@ -39,6 +40,20 @@ class DynamoAdminRepository implements AdminRepository {
     if (!result.Items || result.Items.length === 0) return null;
 
     return toDomain(result.Items[0], Admin);
+  }
+
+  public async findById(adminId: string): Promise<Admin | null> {
+    const result = await this.client.send(
+      new GetItemCommand({
+        TableName: this.tableName,
+        Key: { adminId: { S: adminId } },
+      }),
+    );
+
+    if (!result.Item) return null;
+
+    const raw = unmarshall(result.Item);
+    return toDomain(raw, Admin);
   }
 
   public async create(admin: Admin): Promise<void> {

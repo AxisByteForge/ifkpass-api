@@ -96,18 +96,12 @@ export class AwsCognitoService implements AdminIdentityProviderServiceAdapter {
   }
 
   async promoteAdmin(adminId: string): Promise<void> {
-    try {
-      await this.client.send(
-        new CreateGroupCommand({
-          GroupName: 'Admin',
-          UserPoolId: this.userPoolId,
-        }),
-      );
-    } catch (err) {
-      if (err instanceof Error && err.name !== 'GroupExistsException') {
-        throw err;
-      }
-    }
+    await this.client.send(
+      new CreateGroupCommand({
+        GroupName: 'Admin',
+        UserPoolId: this.userPoolId,
+      }),
+    );
 
     await this.client.send(
       new AdminAddUserToGroupCommand({

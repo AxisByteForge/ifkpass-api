@@ -2,6 +2,8 @@ import {
   AdminGetUserCommand,
   CognitoIdentityProviderClient,
   ConfirmSignUpCommand,
+  ConfirmForgotPasswordCommand,
+  ForgotPasswordCommand,
   InitiateAuthCommand,
   SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -112,5 +114,35 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     const response = await this.client.send(command);
 
     return response.Username ?? '';
+  }
+
+  async forgotPassword(email: string): Promise<void> {
+    const hash = this.generateSecretHash(this.secret, email, this.clientId);
+
+    const command = new ForgotPasswordCommand({
+      ClientId: this.clientId,
+      Username: email,
+      SecretHash: hash,
+    });
+
+    await this.client.send(command);
+  }
+
+  async confirmPasswordReset(
+    email: string,
+    code: string,
+    newPassword: string,
+  ): Promise<void> {
+    const hash = this.generateSecretHash(this.secret, email, this.clientId);
+
+    const command = new ConfirmForgotPasswordCommand({
+      ClientId: this.clientId,
+      Username: email,
+      ConfirmationCode: code,
+      Password: newPassword,
+      SecretHash: hash,
+    });
+
+    await this.client.send(command);
   }
 }

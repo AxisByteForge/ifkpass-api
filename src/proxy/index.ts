@@ -4,6 +4,7 @@ import {
   Context,
 } from 'aws-lambda';
 
+import { approveUser } from 'src/admin/infra/http/handlers/approve-user';
 import { createAdmin } from 'src/admin/infra/http/handlers/create-admin';
 import { sendPhoto } from 'src/user/infra/http/handlers/send-photo';
 
@@ -11,6 +12,8 @@ import { logger } from '../shared/lib/logger/logger';
 import { authenticate } from '../user/infra/http/handlers/authenticate';
 import { createProfile } from '../user/infra/http/handlers/create-profile';
 import { createUser } from '../user/infra/http/handlers/create-user';
+import { forgotPassword } from '../user/infra/http/handlers/forgot-password';
+import { resetPassword } from '../user/infra/http/handlers/reset-password';
 import { verifyEmail } from '../user/infra/http/handlers/verify-email';
 
 export const handler = async (
@@ -28,6 +31,9 @@ export const handler = async (
       '/user/profile': createProfile,
       '/user/profile/photo': sendPhoto,
       '/user/auth': authenticate,
+      '/user/forgot-password': forgotPassword,
+      '/user/reset-password': resetPassword,
+      '/admin/approve-user': approveUser,
     },
   };
 

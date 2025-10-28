@@ -9,6 +9,7 @@ import { factory } from './factory';
 import { authenticateValidate } from './validate';
 import { EmailAlreadyVerifiedException } from '../../../../domain/errors/email-already-verified-exception';
 import { UserAlreadyExistsException } from '../../../../domain/errors/user-already-exists-exception';
+import { UserNotApprovedException } from '../../../../domain/errors/user-not-approved-exception';
 
 async function authenticate(event: APIGatewayProxyEvent) {
   const body = JSON.parse(event.body || '{}');
@@ -41,6 +42,13 @@ async function authenticate(event: APIGatewayProxyEvent) {
         throw new ConflictException(error.message);
       case EmailAlreadyVerifiedException:
         throw new BadRequestException(error.message);
+      case UserNotApprovedException:
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            message: error.message,
+          }),
+        };
       default:
         throw new BadRequestException(error.message);
     }

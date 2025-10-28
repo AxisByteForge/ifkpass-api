@@ -3,7 +3,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 import { Config } from '../../../shared/lib/config/env/get-env';
 import { S3Module } from '../../../shared/modules/storage/s3/client';
-import { StorageServiceAdapter } from '../../domain/adapters/aws/aws-s3-adapter';
+import { StorageServiceAdapter } from '../../../user/domain/adapters/aws/aws-s3-adapter';
 
 const config = new Config();
 

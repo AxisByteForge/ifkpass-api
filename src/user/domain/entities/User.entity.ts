@@ -1,5 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
+export enum UserStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+}
+
 export interface UserProps {
   userId: string;
   name: string;
@@ -7,6 +13,7 @@ export interface UserProps {
   email: string;
   createdAt: string;
   updatedAt: string;
+  status: UserStatus;
 }
 
 export class User {
@@ -17,7 +24,7 @@ export class User {
   }
 
   static create(
-    props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'userId'>,
+    props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'userId' | 'status'>,
   ): User {
     const now = new Date().toISOString();
     const userId = randomUUID();
@@ -27,6 +34,7 @@ export class User {
       userId,
       createdAt: now,
       updatedAt: now,
+      status: UserStatus.PENDING,
     });
   }
 
@@ -38,10 +46,12 @@ export class User {
     createdAt: string;
     updatedAt: string;
     version: number;
+    status?: string;
   }): User {
     return new User({
       ...props,
       email: props.email,
+      status: (props.status as UserStatus) || UserStatus.PENDING,
     });
   }
 
@@ -61,6 +71,18 @@ export class User {
 
   getFullName(): string {
     return `${this.props.name} ${this.props.lastName}`;
+  }
+
+  getStatus(): UserStatus {
+    return this.props.status;
+  }
+
+  updateStatus(status: UserStatus): void {
+    this.props = {
+      ...this.props,
+      status,
+      updatedAt: new Date().toISOString(),
+    };
   }
 
   getProps(): Readonly<UserProps> {
