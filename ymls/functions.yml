@@ -1,4 +1,0 @@
-Proxy:
-  handler: dist/index.handler
-  name: ${self:service}-${self:provider.stage}-proxy
-  timeout: 900

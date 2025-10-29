@@ -1,0 +1,11 @@
+{
+  "body": "{\"userId\":\"f820fc1c-af7e-407c-8475-f45b60d1bda2\",\"status\":\"approved\"}",
+  "httpMethod": "POST",
+  "path": "/admin/approve-user",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTBlODQwMC1lMjliLTQxZDQtYTcxNi00NDY2NTU0NDAwMDAiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MDk4MjQ4MDAsImV4cCI6OTk5OTk5OTk5OX0.dummyToken"
+  },
+  "isBase64Encoded": false
+}
+

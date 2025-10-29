@@ -5,111 +5,222 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Lambda: CreateUser",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/create-user-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**"
-      ]
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Lambda: CreateAdmin",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/create-admin-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**"
-      ]
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Lambda: VerifyEmail",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/verify-email-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**"
-      ]
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Lambda: CreateProfile",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/create-profile-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**"
-      ]
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Lambda: SendPhoto",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/send-photo-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: Authenticate",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/authenticate-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: ResetPassword",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/reset-password-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: ApproveUser",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/approve-user-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "CDK: Debug Synth (dev)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/bin/app.ts"
+      ],
+      "env": {
+        "STAGE": "dev",
+        "CDK_DEFAULT_ACCOUNT": "972210179301",
+        "CDK_DEFAULT_REGION": "us-east-1"
+      },
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/bin/**/*.js",
+        "${workspaceFolder}/lib/**/*.js"
       ],
       "sourceMaps": true,
       "skipFiles": [
@@ -119,20 +230,85 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Lambda: Authenticate",
-      "program": "${workspaceFolder}/node_modules/.bin/sls",
+      "name": "CDK: Debug Synth (prd)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/bin/app.ts"
+      ],
+      "env": {
+        "STAGE": "prd",
+        "CDK_DEFAULT_ACCOUNT": "972210179301",
+        "CDK_DEFAULT_REGION": "us-east-1"
+      },
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/bin/**/*.js",
+        "${workspaceFolder}/lib/**/*.js"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "CDK: Synth Stack",
+      "program": "${workspaceFolder}/node_modules/aws-cdk/bin/cdk",
       "args": [
-        "invoke",
-        "local",
-        "-f",
-        "Proxy",
-        "-p",
-        "${workspaceFolder}/.vscode/payloads/authenticate-payload.json"
+        "synth",
+        "--context",
+        "stage=dev"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
+        "${workspaceFolder}/**/*.js"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "CDK: Deploy Stack (dev)",
+      "program": "${workspaceFolder}/node_modules/aws-cdk/bin/cdk",
+      "args": [
+        "deploy",
+        "--context",
+        "stage=dev",
+        "--require-approval",
+        "never"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "CDK: Diff Stack (dev)",
+      "program": "${workspaceFolder}/node_modules/aws-cdk/bin/cdk",
+      "args": [
+        "diff",
+        "--context",
+        "stage=dev"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
       ],
       "sourceMaps": true,
       "skipFiles": [

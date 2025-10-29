@@ -75,7 +75,7 @@ web_modules/
 
 # dotenv environment variable files
 .env
-.env.development.local
+.env.dev.local
 .env.test.local
 .env.production.local
 .env.local
@@ -108,8 +108,9 @@ dist
 # Docusaurus cache and generated files
 .docusaurus
 
-# Serverless directories
-.serverless/
+# CDK asset staging directory
+.cdk.staging
+cdk.out
 
 # FuseBox cache
 .fusebox/
