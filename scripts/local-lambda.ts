@@ -4,6 +4,8 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 
+import { handler } from '../src/infra/http/handlers/proxy';
+
 // Carrega o handler da Lambda
 async function runLocalLambda() {
   const payloadPath = process.argv[2];
@@ -40,22 +42,20 @@ async function runLocalLambda() {
     };
 
     // Importa e executa o handler
-    const { handler } = await import('../src/proxy/index.js');
-    
+
     console.log('🚀 Executando Lambda...\n');
     const startTime = Date.now();
-    
+
     const result = await handler(event, context);
-    
+
     const duration = Date.now() - startTime;
-    
+
     console.log('\n✅ Lambda executada com sucesso!');
     console.log(`⏱️  Duração: ${duration}ms`);
     console.log('\n📤 Resposta:');
     console.log('Status:', result.statusCode);
     console.log('Headers:', JSON.stringify(result.headers || {}, null, 2));
     console.log('Body:', result.body ? JSON.parse(result.body) : null);
-
   } catch (error) {
     console.error('\n❌ Erro ao executar Lambda:');
     console.error(error);
@@ -64,4 +64,3 @@ async function runLocalLambda() {
 }
 
 runLocalLambda();
-

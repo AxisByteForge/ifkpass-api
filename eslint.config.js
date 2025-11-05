@@ -39,22 +39,6 @@ export default [
         },
       ],
 
-      'import/order': [
-        'error',
-        {
-          groups: [
-            ['builtin', 'external'],
-            ['internal'],
-            ['parent', 'sibling', 'index'],
-          ],
-          'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
-
       '@typescript-eslint/no-explicit-any': 'warn',
       'import/no-duplicates': 'error',
       'import/no-unresolved': 'error',

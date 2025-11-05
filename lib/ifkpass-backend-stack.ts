@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 
@@ -39,7 +39,7 @@ export class IfkpassBackendStack extends cdk.Stack {
       roleName: `${stage}-ifkpass-backend-proxy-role`,
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName(
-          'service-role/AWSLambdaBasicExecutionRole'
+          'service-role/AWSLambdaBasicExecutionRole',
         ),
       ],
     });
@@ -61,7 +61,7 @@ export class IfkpassBackendStack extends cdk.Stack {
           'states:*',
         ],
         resources: ['*'],
-      })
+      }),
     );
 
     // CloudWatch Log Group para a Lambda
@@ -80,9 +80,14 @@ export class IfkpassBackendStack extends cdk.Stack {
       VERSION: '1.0.0',
       BCRYPT_SALT_ROUNDS: '10',
       COGNITO_URL: 'https://cognito-idp.us-east-1.amazonaws.com',
-      COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID || '5t2ev7jjncg5cgn7vaq6vpm6dg',
-      COGNITO_CLIENT_SECRET: process.env.COGNITO_CLIENT_SECRET || '4q5te8k161eppget5ffnqlgdsf6kq00stm07tj256um2bt5gc5n',
-      RESEND_MAIL_API_KEY: process.env.RESEND_MAIL_API_KEY || 're_FsEgzdsJ_DNWTFiy41QSU3cXEaHpzW5dZ',
+      COGNITO_CLIENT_ID:
+        process.env.COGNITO_CLIENT_ID || '5t2ev7jjncg5cgn7vaq6vpm6dg',
+      COGNITO_CLIENT_SECRET:
+        process.env.COGNITO_CLIENT_SECRET ||
+        '4q5te8k161eppget5ffnqlgdsf6kq00stm07tj256um2bt5gc5n',
+      RESEND_MAIL_API_KEY:
+        process.env.RESEND_MAIL_API_KEY ||
+        're_FsEgzdsJ_DNWTFiy41QSU3cXEaHpzW5dZ',
       COGNITO_USER_POOL_ID: process.env.COGNITO_USER_POOL_ID || '1_HgPECUwQR',
       USERS_TABLE_NAME: config.usersTableName,
       PROFILE_BUCKET_NAME: config.profileBucketName,
@@ -124,4 +129,3 @@ export class IfkpassBackendStack extends cdk.Stack {
     });
   }
 }
-
