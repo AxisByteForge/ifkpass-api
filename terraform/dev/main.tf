@@ -1,10 +1,10 @@
 resource "aws_dynamodb_table" "users" {
   name         = "users-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "userId"
+  hash_key     = "Id"
 
   attribute {
-    name = "userId"
+    name = "Id"
     type = "S"
   }
 
@@ -37,32 +37,4 @@ resource "aws_dynamodb_table" "users" {
     Environment = var.environment
   }
 
-}
-
-resource "aws_dynamodb_table" "admins" {
-  name         = "admins-${var.environment}"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "adminId"
-
-  # Chave primária
-  attribute {
-    name = "adminId"
-    type = "S"
-  }
-
-  attribute {
-    name = "email"
-    type = "S"
-  }
-
-  global_secondary_index {
-    name            = "email-index"
-    hash_key        = "email"
-    projection_type = "ALL"
-  }
-
-  tags = {
-    Name        = "admins-${var.environment}"
-    Environment = var.environment
-  }
 }

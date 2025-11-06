@@ -9,13 +9,14 @@ const config = new Config();
 const baseUrl = config.get('COGNITO_URL');
 const userPoolId = config.get('COGNITO_USER_POOL_ID');
 const clientId = config.get('COGNITO_CLIENT_ID');
+const adminGroup = config.get('COGNITO_ADMINS_GROUP_NAME');
 
 const JWKS = createRemoteJWKSet(
   new URL(`${baseUrl}/${userPoolId}/.well-known/jwks.json`),
 );
 
 interface DecodedTokenResult {
-  userId: string;
+  Id: string;
   sub: string;
   email: string;
   isAdmin: boolean;
@@ -38,12 +39,17 @@ export async function verifyToken(
 
     const sub = payload.sub as string;
     const email = payload.email as string;
-    const userId = payload['cognito:username'] as string;
-    const groups = payload['cognito:groups'] as string[] | undefined;
-    const isAdmin = groups?.includes('Admin') ?? false;
+    const Id = payload['cognito:username'] as string;
+    const groupsClaim = payload['cognito:groups'];
+    const groups = Array.isArray(groupsClaim)
+      ? groupsClaim
+      : groupsClaim
+        ? [groupsClaim as string]
+        : [];
+    const isAdmin = groups.includes(adminGroup);
 
     return {
-      userId,
+      Id,
       sub,
       email,
       isAdmin,

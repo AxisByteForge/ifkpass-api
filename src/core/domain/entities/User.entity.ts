@@ -7,13 +7,14 @@ export enum UserStatus {
 }
 
 export interface UserProps {
-  userId: string;
+  Id: string;
   name: string;
   lastName: string;
   email: string;
   createdAt: string;
   updatedAt: string;
   status: UserStatus;
+  isAdmin: boolean;
   // Profile properties (optional)
   birthDate?: string;
   city?: string;
@@ -33,22 +34,25 @@ export class User {
   }
 
   static create(
-    props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'userId' | 'status'>,
+    props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'Id' | 'status'> & {
+      isAdmin?: boolean;
+    },
   ): User {
     const now = new Date().toISOString();
-    const userId = randomUUID();
+    const Id = randomUUID();
 
     return new User({
       ...props,
-      userId,
+      Id,
       createdAt: now,
       updatedAt: now,
-      status: UserStatus.PENDING,
+      status: props.isAdmin === true ? UserStatus.APPROVED : UserStatus.PENDING,
+      isAdmin: props.isAdmin ?? false,
     });
   }
 
   static fromPersistence(props: {
-    userId: string;
+    Id: string;
     name: string;
     lastName: string;
     email: string;
@@ -56,6 +60,7 @@ export class User {
     updatedAt: string;
     version: number;
     status?: string;
+    isAdmin?: boolean;
     birthDate?: string;
     city?: string;
     cpf?: string;
@@ -69,6 +74,7 @@ export class User {
       ...props,
       email: props.email,
       status: (props.status as UserStatus) || UserStatus.PENDING,
+      isAdmin: props.isAdmin ?? false,
     });
   }
 
@@ -83,7 +89,7 @@ export class User {
   }
 
   getId(): string {
-    return this.props.userId;
+    return this.props.Id;
   }
 
   getFullName(): string {
@@ -92,6 +98,10 @@ export class User {
 
   getStatus(): UserStatus {
     return this.props.status;
+  }
+
+  isAdmin(): boolean {
+    return this.props.isAdmin;
   }
 
   updateStatus(status: UserStatus): void {

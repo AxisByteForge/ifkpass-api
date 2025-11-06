@@ -1,7 +1,7 @@
 import { Either } from 'src/shared/types/either';
 
 export interface SendPhotoUseCaseRequest {
-  userId: string;
+  Id: string;
 }
 
 export type SendPhotoUseCaseResponse = Either<

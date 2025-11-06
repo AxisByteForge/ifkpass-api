@@ -1,7 +1,7 @@
 import { Either } from 'src/shared/types/either';
 
 export interface CreateProfileUseCaseRequest {
-  userId: string;
+  Id: string;
   body: {
     birthDate: string;
     city: string;

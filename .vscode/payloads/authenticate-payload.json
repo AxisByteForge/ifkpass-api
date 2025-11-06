@@ -1,5 +1,5 @@
 {
-  "body": "{\"email\":\"admin_teste@mail.com\",\"password\":\"ifkPass@Admin2025\"}",
+  "body": "{\"email\":\"barretoruan77@gmail.com\",\"password\":\"ifkPass@Admin2025\"}",
   "httpMethod": "POST",
   "path": "/user/auth",
   "headers": {

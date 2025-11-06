@@ -17,7 +17,6 @@ export class VerifyEmailUseCase {
   async execute({
     code,
     email,
-    password,
   }: VerifyEmailUseCaseRequest): Promise<VerifyEmailUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -29,11 +28,8 @@ export class VerifyEmailUseCase {
 
     await this.identityProvider.confirmEmail(id, code);
 
-    const token = await this.identityProvider.signIn(id, password);
-
     return right({
-      statusCode: 200,
-      token,
+      message: 'Email verified successfully',
     });
   }
 }

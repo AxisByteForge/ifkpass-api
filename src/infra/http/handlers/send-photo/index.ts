@@ -10,11 +10,11 @@ async function sendPhoto(event: APIGatewayProxyEvent) {
   try {
     const headers = event.headers as Partial<RequestHeaders>;
 
-    const { userId } = await verifyToken(headers.Authorization);
+    const { Id } = await verifyToken(headers.Authorization);
 
     const useCase = makeSendPhotoUseCase();
 
-    const result = await useCase.execute({ userId });
+    const result = await useCase.execute({ Id });
 
     return {
       statusCode: 201,

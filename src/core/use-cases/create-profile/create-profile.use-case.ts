@@ -11,10 +11,10 @@ export class CreateProfileUseCase {
   constructor(private userRepository: UserRepository) {}
 
   async execute({
-    userId,
+    Id,
     body,
   }: CreateProfileUseCaseRequest): Promise<CreateProfileUseCaseResponse> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this.userRepository.findById(Id);
 
     if (!user) {
       throw new UserNotFoundException('User not found');

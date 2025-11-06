@@ -29,7 +29,6 @@ async function verifyEmail(
   const response = await useCase.execute({
     email: parsed.data.email,
     code: parsed.data.emailVerificationCode,
-    password: parsed.data.password,
   });
 
   if (response.isLeft()) {
@@ -44,7 +43,7 @@ async function verifyEmail(
   }
 
   return {
-    statusCode: 201,
+    statusCode: 200,
     body: JSON.stringify(response.value),
   };
 }

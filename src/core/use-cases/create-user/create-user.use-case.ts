@@ -22,20 +22,29 @@ export class CreateUserUseCase {
       name: props.name,
       lastName: props.lastName,
       email: props.email,
+      isAdmin: props.isAdmin ?? false,
     });
 
     const email = user.getEmail();
-    const userId = user.getId();
+    const Id = user.getId();
 
     const userAlreadyExists = await this.userRepository.findByEmail(email);
 
     if (userAlreadyExists) {
       return left(new UserAlreadyExistsException(email));
     }
-    await Promise.all([
-      this.identityProvider.signUp(userId, email, props.password),
-      this.userRepository.create(user),
-    ]);
+    await this.identityProvider.signUp(Id, email, props.password);
+
+    const tasks: Array<Promise<unknown>> = [this.userRepository.create(user)];
+
+    if (props.isAdmin) {
+      tasks.push(
+        this.identityProvider.confirmEmailWithoutCode(Id),
+        this.identityProvider.promoteAdmin(Id),
+      );
+    }
+
+    await Promise.all(tasks);
 
     return right({
       message: 'Created',

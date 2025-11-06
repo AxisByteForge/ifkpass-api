@@ -1,4 +1,6 @@
 import {
+  AdminAddUserToGroupCommand,
+  AdminConfirmSignUpCommand,
   AdminGetUserCommand,
   CognitoIdentityProviderClient,
   ConfirmSignUpCommand,
@@ -20,6 +22,7 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
   private readonly clientId: string;
   private readonly secret: string;
   private readonly userPoolId: string;
+  private readonly adminGroup: string;
 
   constructor(cognito: CognitoModule) {
     this.client = cognito.getClient();
@@ -27,6 +30,7 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     this.clientId = config.get('COGNITO_CLIENT_ID');
     this.secret = config.get('COGNITO_CLIENT_SECRET');
     this.userPoolId = config.get('COGNITO_USER_POOL_ID');
+    this.adminGroup = config.get('COGNITO_ADMINS_GROUP_NAME');
   }
 
   private generateSecretHash(
@@ -42,12 +46,12 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     return hash;
   }
 
-  async signUp(userId: string, email: string, password: string) {
-    const hash = this.generateSecretHash(this.secret, userId, this.clientId);
+  async signUp(Id: string, email: string, password: string) {
+    const hash = this.generateSecretHash(this.secret, Id, this.clientId);
 
     const command = new SignUpCommand({
       ClientId: this.clientId,
-      Username: userId,
+      Username: Id,
       Password: password,
       SecretHash: hash,
       UserAttributes: [{ Name: 'email', Value: email }],
@@ -56,14 +60,14 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     await this.client.send(command);
   }
 
-  async signIn(userId: string, password: string): Promise<string> {
-    const hash = this.generateSecretHash(this.secret, userId, this.clientId);
+  async signIn(Id: string, password: string): Promise<string> {
+    const hash = this.generateSecretHash(this.secret, Id, this.clientId);
 
     const command = new InitiateAuthCommand({
       AuthFlow: 'USER_PASSWORD_AUTH',
       ClientId: this.clientId,
       AuthParameters: {
-        USERNAME: userId,
+        USERNAME: Id,
         PASSWORD: password,
         SECRET_HASH: hash,
       },
@@ -92,12 +96,12 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     return emailVerified === 'true';
   }
 
-  async confirmEmail(userId: string, code: string) {
-    const hash = this.generateSecretHash(this.secret, userId, this.clientId);
+  async confirmEmail(Id: string, code: string) {
+    const hash = this.generateSecretHash(this.secret, Id, this.clientId);
 
     const command = new ConfirmSignUpCommand({
       ClientId: this.clientId,
-      Username: userId,
+      Username: Id,
       ConfirmationCode: code,
       SecretHash: hash,
     });
@@ -105,7 +109,26 @@ export class AwsCognitoService implements UserIdentityProviderServiceAdapter {
     await this.client.send(command);
   }
 
-  async getUserId(email: string): Promise<string | null> {
+  async confirmEmailWithoutCode(Id: string): Promise<void> {
+    const command = new AdminConfirmSignUpCommand({
+      UserPoolId: this.userPoolId,
+      Username: Id,
+    });
+
+    await this.client.send(command);
+  }
+
+  async promoteAdmin(Id: string): Promise<void> {
+    const command = new AdminAddUserToGroupCommand({
+      GroupName: this.adminGroup,
+      UserPoolId: this.userPoolId,
+      Username: Id,
+    });
+
+    await this.client.send(command);
+  }
+
+  async getId(email: string): Promise<string | null> {
     const command = new AdminGetUserCommand({
       Username: email,
       UserPoolId: this.userPoolId,

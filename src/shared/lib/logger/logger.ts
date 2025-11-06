@@ -1,23 +1,56 @@
 import pino from 'pino';
 
+type LoggerEvent = { body?: string | null } | undefined;
+
+const sanitizeSensitiveFields = (payload: unknown): unknown => {
+  if (payload === null || typeof payload !== 'object') {
+    return payload;
+  }
+
+  if (Array.isArray(payload)) {
+    return payload.map(sanitizeSensitiveFields);
+  }
+
+  const sensitiveKeys = new Set([
+    'password',
+    'newPassword',
+    'oldPassword',
+    'confirmPassword',
+  ]);
+
+  return Object.entries(payload).reduce<Record<string, unknown>>(
+    (acc, [key, value]) => {
+      if (sensitiveKeys.has(key)) {
+        acc[key] = '[REDACTED]';
+        return acc;
+      }
+
+      acc[key] = sanitizeSensitiveFields(value);
+      return acc;
+    },
+    {},
+  );
+};
+
 const logger = (
-  event: any,
-  response: Record<string, any>,
+  event: LoggerEvent,
+  response: Record<string, unknown>,
   error?: unknown,
 ): void => {
-  const body = JSON.parse(event.body || '{}');
-
-  if ('password' in body) {
-    body.password = '[REDACTED]';
+  let parsedBody: unknown = undefined;
+  try {
+    parsedBody = event?.body ? JSON.parse(event.body) : undefined;
+  } catch {
+    parsedBody = event?.body;
   }
 
   const logObject: {
-    request: { body: any };
-    response: Record<string, any>;
+    request: { body: unknown };
+    response: Record<string, unknown>;
     error?: unknown;
   } = {
     request: {
-      body: event.body,
+      body: sanitizeSensitiveFields(parsedBody),
     },
     response,
   };

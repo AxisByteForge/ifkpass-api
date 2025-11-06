@@ -45,11 +45,11 @@ class DynamoUserRepository implements UserRepository {
     return toDomain(raw, User);
   }
 
-  public async findById(userId: string): Promise<User | null> {
+  public async findById(Id: string): Promise<User | null> {
     const result = await this.client.send(
       new GetItemCommand({
         TableName: this.tableName,
-        Key: { userId: { S: userId } },
+        Key: { Id: { S: Id } },
       }),
     );
 
@@ -75,7 +75,7 @@ class DynamoUserRepository implements UserRepository {
     const persistenceProps = toPersistence(user);
 
     const setExpressions: string[] = [
-      'name = :name',
+      '#name = :name',
       'lastName = :lastName',
       'email = :email',
       'updatedAt = :updatedAt',
@@ -83,6 +83,7 @@ class DynamoUserRepository implements UserRepository {
     ];
 
     const expressionAttributeNames: Record<string, string> = {
+      '#name': 'name',
       '#status': 'status',
     };
 
@@ -135,25 +136,30 @@ class DynamoUserRepository implements UserRepository {
       expressionAttributeValues[':cardId'] = persistenceProps.cardId;
     }
 
+    if (persistenceProps.isAdmin !== undefined) {
+      setExpressions.push('isAdmin = :isAdmin');
+      expressionAttributeValues[':isAdmin'] = persistenceProps.isAdmin;
+    }
+
     await this.client.send(
       new UpdateItemCommand({
         TableName: this.tableName,
-        Key: { userId: { S: persistenceProps.userId } },
+        Key: { Id: { S: persistenceProps.Id } },
         UpdateExpression: `SET ${setExpressions.join(', ')}`,
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: marshall(expressionAttributeValues, {
           removeUndefinedValues: true,
         }),
-        ConditionExpression: 'attribute_exists(userId)',
+        ConditionExpression: 'attribute_exists(Id)',
       }),
     );
   }
 
-  public async updateStatus(userId: string, status: UserStatus): Promise<void> {
+  public async updateStatus(Id: string, status: UserStatus): Promise<void> {
     await this.client.send(
       new UpdateItemCommand({
         TableName: this.tableName,
-        Key: { userId: { S: userId } },
+        Key: { Id: { S: Id } },
         UpdateExpression: `
           SET 
             #status = :status,
@@ -169,7 +175,7 @@ class DynamoUserRepository implements UserRepository {
           },
           { removeUndefinedValues: true },
         ),
-        ConditionExpression: 'attribute_exists(userId)',
+        ConditionExpression: 'attribute_exists(Id)',
       }),
     );
   }

@@ -13,7 +13,7 @@ async function createProfile(event: APIGatewayProxyEvent) {
     const parsed = profileValidate.safeParse(body);
     const headers = event.headers as Partial<RequestHeaders>;
 
-    const { userId } = await verifyToken(headers.Authorization);
+    const { Id } = await verifyToken(headers.Authorization);
 
     if (!parsed.success) {
       const { fieldErrors } = parsed.error.flatten();
@@ -30,7 +30,7 @@ async function createProfile(event: APIGatewayProxyEvent) {
     const useCase = makeCreateProfileUseCase();
 
     const result = await useCase.execute({
-      userId,
+      Id,
       body: parsed.data,
     });
 

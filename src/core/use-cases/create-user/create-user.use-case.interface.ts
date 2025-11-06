@@ -8,6 +8,7 @@ export interface CreateUserUseCaseRequest {
     lastName: string;
     email: string;
     password: string;
+    isAdmin?: boolean;
   };
 }
 

@@ -13,9 +13,9 @@ export class SendPhotoUseCase {
   ) {}
 
   async execute({
-    userId,
+    Id,
   }: SendPhotoUseCaseRequest): Promise<SendPhotoUseCaseResponse> {
-    const key = `users/${userId}/profile-photo.jpg`;
+    const key = `users/${Id}/profile-photo.jpg`;
 
     const { photoUrl, uploadUrl } = await this.storageService.sendObject(
       key,

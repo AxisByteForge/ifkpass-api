@@ -12,6 +12,7 @@ import { forgotPassword } from '../forgot-password';
 import { resetPassword } from '../reset-password';
 import { sendPhoto } from '../send-photo';
 import { verifyEmail } from '../verify-email';
+import { approveUser } from '../approve-user';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -30,7 +31,7 @@ export const handler = async (
       '/user/auth': authenticate,
       '/user/forgot-password': forgotPassword,
       '/user/reset-password': resetPassword,
-      // '/admin/approve-user': approveUser, // TODO: Implement approve-user handler
+      '/admin/approve-user': approveUser,
     },
   };
 

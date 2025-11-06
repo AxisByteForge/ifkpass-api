@@ -3,7 +3,7 @@ import { UserStatus } from 'src/core/domain/entities/User.entity';
 
 export interface ApproveUserUseCaseRequest {
   adminId: string;
-  userId: string;
+  Id: string;
   status: UserStatus.APPROVED | UserStatus.REJECTED;
 }
 

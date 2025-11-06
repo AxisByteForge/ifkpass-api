@@ -7,6 +7,7 @@ export const envs = {
   STAGE: z.string().default('dev'),
   USERS_TABLE_NAME: z.string(),
   ADMINS_TABLE_NAME: z.string(),
+  COGNITO_ADMINS_GROUP_NAME: z.string(),
   RESEND_MAIL_API_KEY: z.string(),
   COGNITO_CLIENT_ID: z.string(),
   COGNITO_CLIENT_SECRET: z.string(),

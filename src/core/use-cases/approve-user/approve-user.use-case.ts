@@ -6,33 +6,29 @@ import {
 } from './approve-user.use-case.interface';
 import { UserStatus } from '../../domain/entities/User.entity';
 import { UserNotFoundException } from '../../domain/errors/user-not-found-exception';
-import { AdminRepository } from '../../domain/repositories/AdminRepository';
 import { UserRepository } from '../../domain/repositories/UserRepository';
 
 export class ApproveUserUseCase {
-  constructor(
-    private adminRepository: AdminRepository,
-    private userRepository: UserRepository,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   async execute({
     adminId,
-    userId,
+    Id,
     status,
   }: ApproveUserUseCaseRequest): Promise<ApproveUserUseCaseResponse> {
-    const admin = await this.adminRepository.findById(adminId);
+    const admin = await this.userRepository.findById(adminId);
 
-    if (!admin) {
-      return left(new Error('Admin not found'));
+    if (!admin || !admin.isAdmin()) {
+      return left(new Error('Usuário não possui privilégios de administrador'));
     }
 
-    const user = await this.userRepository.findById(userId);
+    const user = await this.userRepository.findById(Id);
 
     if (!user) {
-      return left(new UserNotFoundException(userId));
+      return left(new UserNotFoundException(Id));
     }
 
-    await this.userRepository.updateStatus(userId, status);
+    await this.userRepository.updateStatus(Id, status);
 
     return right({
       message: `User ${status === UserStatus.APPROVED ? 'approved' : 'rejected'} successfully`,

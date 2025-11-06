@@ -6,12 +6,11 @@ import { UserAlreadyExistsException } from '../../domain/errors/user-already-exi
 interface VerifyEmailUseCaseRequest {
   email: string;
   code: string;
-  password: string;
 }
 
 type VerifyEmailUseCaseResponse = Either<
   UserAlreadyExistsException | EmailAlreadyVerifiedException,
-  { statusCode: number; token: string }
+  { message: string }
 >;
 
 export { VerifyEmailUseCaseRequest, VerifyEmailUseCaseResponse };
