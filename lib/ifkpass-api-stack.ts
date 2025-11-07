@@ -73,6 +73,8 @@ export class IfkpassApiStack extends cdk.Stack {
       MERCADO_PAGO_PUBLIC_KEY: 'APP_USR-8a48b84f-78d4-4419-ab62-71ca336bde20',
       MERCADO_PAGO_WEBHOOK_URL:
         'https://k3d4il4asi.execute-api.us-east-1.amazonaws.com/ifkpass-api/mercado-pago/webhook',
+      MERCADO_PAGO_WEBHOOK_SECRET:
+        'b6c5590bf05bc50cfd4591fc75a47e9355dd933d98588055e4005fb9c464886a',
     };
 
     const proxyEntry = join(
