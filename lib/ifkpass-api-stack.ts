@@ -12,7 +12,7 @@ export interface IfkpassBackendStackProps extends cdk.StackProps {
   stage: string;
 }
 
-export class IfkpassBackendStack extends cdk.Stack {
+export class IfkpassApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: IfkpassBackendStackProps) {
     super(scope, id, props);
 

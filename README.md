@@ -111,6 +111,165 @@ Todos os handlers ficam em `src/infra/http/handlers` e são roteados por `proxy/
 
 Os handlers aplicam validações com Zod e convertem exceções de domínio para respostas HTTP consistentes usando o módulo de erros (`src/shared/types/errors/http-errors.ts`).
 
+## Guia para o Front-end
+
+### Base URL e Autenticação
+
+- **Base URL**: `https://mh8vkh13sb.execute-api.us-east-1.amazonaws.com/dev`
+  - Ajuste o stage (`/dev`) conforme ambiente (`/prd`, `/hml` etc.).
+- **Autenticação**: use JWT do Cognito no header `Authorization: Bearer <token>` para rotas autenticadas.
+- Todos os endpoints retornam JSON; envie payloads com `Content-Type: application/json`.
+
+### 1. Cadastro de usuário / admin – `POST /user`
+
+- **Request Body**
+  ```json
+  {
+    "props": {
+      "name": "John",
+      "lastName": "Doe",
+      "email": "john@ifk.com",
+      "password": "Senha@123",
+      "isAdmin": false
+    }
+  }
+  ```
+- `isAdmin` é opcional (default: `false`). Quando `true`, o Cognito confirma e coloca o usuário no grupo de admins.
+- **Responses**
+  - `201 Created`: `{ "message": "Created" }`
+  - `409 Conflict`: usuário já existente.
+
+### 2. Verificar e-mail – `POST /user/verify-email`
+
+- **Request Body**
+  ```json
+  {
+    "email": "john@ifk.com",
+    "code": "123456"
+  }
+  ```
+- **Responses**: `200 OK` com `{ "message": "Email verified" }` ou erro se o código estiver incorreto.
+
+### 3. Autenticar – `POST /user/auth`
+
+- **Request Body**
+  ```json
+  {
+    "email": "john@ifk.com",
+    "password": "Senha@123"
+  }
+  ```
+- **Responses**
+  - `201 Created`: `{ "statusCode": 200, "token": "<JWT Cognito>" }`
+  - `403 Forbidden`: usuário pendente / rejeitado.
+  - `404 Not Found`: usuário inexistente.
+
+### 4. Redefinição de senha
+
+- **Iniciar** – `POST /user/forgot-password`
+  ```json
+  { "email": "john@ifk.com" }
+  ```
+- **Confirmar** – `POST /user/reset-password`
+  ```json
+  {
+    "email": "john@ifk.com",
+    "code": "123456",
+    "newPassword": "NovaSenha@321"
+  }
+  ```
+
+### 5. Perfil do usuário – `POST /user/profile`
+
+- **Requer token**.
+- **Request Body (exemplo)**
+  ```json
+  {
+    "birthDate": "1990-01-01",
+    "city": "São Paulo",
+    "cpf": "12345678900",
+    "dojo": "Dojo Central",
+    "rank": "Preta",
+    "sensei": "Tanaka",
+    "photoUrl": "https://.../profile-photo.jpg"
+  }
+  ```
+- `rank` deve ser uma cor válida do enum (`Branca`, `Amarela`, `Laranja`, `Verde`, `Azul`, `Marrom`, `Preta`, `Vermelha`).
+- **Responses**: `201 Created` ou `401 Unauthorized` se o token for inválido/expirado.
+
+### 6. Upload de foto – `POST /user/profile/photo`
+
+- **Requer token**.
+- Retorna `{ "photoUrl": "https://...", "uploadUrl": "https://s3..." }` para o front subir a imagem (PUT) em S3.
+
+### 7. Pagamento da anuidade – `POST /user/pay-card`
+
+- **Requer token** e utiliza Mercado Pago Checkout Pro.
+- **Criar preferência** (sem `paymentStatus`):
+  ```json
+  { "action": "create" }
+  ```
+  - Response inclui `amount`, `currency`, `preferenceId`, `initPoint`, `paymentDetails` e se há desconto (`discountApplied`).
+  - O valor depende da faixa (`colored` x `Preta`) e da data (desconto até 08/03/2025).
+- **Confirmar status** (webhook ou callback manual):
+  ```json
+  {
+    "action": "confirm",
+    "paymentStatus": "approved",
+    "paymentId": "123456789"
+  }
+  ```
+  - Atualiza `paymentDetails` e `alreadyPaid` do usuário.
+  - `paymentStatus` aceita `approved`, `pending`, `rejected`.
+
+### 8. Webhook Mercado Pago – `POST /mercado-pago/webhook`
+
+- Endpoint público configurado como `notification_url` no Mercado Pago.
+- Recebe o `paymentId` (via query/body), consulta o status e chama internamente o caso de uso para confirmar pagamento.
+- Não requer token (calls vindas do Mercado Pago), mas recomenda-se validar assinatura se disponível.
+
+### 9. Aprovar/Rejeitar usuário – `POST /admin/approve-user`
+
+- **Requer token de admin** (verificação via grupos Cognito).
+- **Request Body**
+  ```json
+  {
+    "Id": "UUID-do-usuario",
+    "status": "approved"
+  }
+  ```
+- `status`: `approved` ou `rejected` (o use case converte para enum interno).
+- **Responses**: `200 OK` com mensagem ou `403` se o token não pertencer a um admin.
+
+### 10. Headers importantes
+
+- `Authorization`: Bearer `<JWT Cognito>` (para rotas autenticadas `/user/*` e `/admin/*`).
+- `Content-Type`: `application/json` em todas as requisições.
+- Os handlers retornam sempre JSON; trate erros inspecionando `statusCode` e `body`.
+
+### 11. Estrutura de erros
+
+- Exceções do domínio são convertidas em HTTP errors com o formato:
+  ```json
+  {
+    "statusCode": 400,
+    "message": "Validation error",
+    "errors": { "email": ["E-mail inválido"] }
+  }
+  ```
+- Tokens expirados retornam `401` com mensagem `Token expirado. Faça login novamente para continuar.`
+
+### 12. Fluxo completo sugerido
+
+1. `POST /user` → criar usuário/admin.
+2. `POST /user/verify-email` → confirmar e-mail.
+3. `POST /user/auth` → receber JWT.
+4. `POST /user/profile` / `POST /user/profile/photo` → completar cadastro.
+5. `POST /user/pay-card` → gerar checkout; depois o webhook confirmará o pagamento e atualizará `paymentDetails`.
+6. Admin pode usar `POST /admin/approve-user` após verificar documentação do aluno.
+
+Se restar dúvida sobre algum payload, consulte os exemplos em `.vscode/payloads` ou os schemas Zod em `src/infra/http/handlers/*/validate`.
+
 ## Fluxos-chave
 
 1. **Cadastro de usuário/admin**

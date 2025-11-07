@@ -20,6 +20,7 @@ function extractPaymentId(
 
 async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
   try {
+    console.log('event', event);
     const body = event.body ? JSON.parse(event.body) : {};
 
     const paymentId = extractPaymentId(event, body);

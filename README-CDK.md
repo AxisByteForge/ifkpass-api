@@ -7,11 +7,11 @@ Este projeto foi migrado do Serverless Framework para AWS CDK. Esta documentaç�
 ## 🏗️ Estrutura do Projeto
 
 ```
-ifkpass-backend/
+ifkpass-api/
 ├── bin/
 │   └── app.ts              # Ponto de entrada da aplicação CDK
 ├── lib/
-│   └── ifkpass-backend-stack.ts  # Definição do stack principal
+│   └── ifkpass-api-stack.ts  # Definição do stack principal
 ├── src/                    # Código fonte das Lambdas (sem alterações)
 ├── dist/                   # Código compilado das Lambdas
 ├── cdk.json                # Configuração do CDK
@@ -114,7 +114,7 @@ Os payloads estão em `.vscode/payloads/` e podem ser personalizados conforme ne
 
 ### Lambda Function
 
-- **Nome**: `{stage}-ifkpass-backend-{stage}-proxy`
+- **Nome**: `{stage}-ifkpass-api-{stage}-proxy`
 - **Runtime**: Node.js 22.x
 - **Timeout**: 900 segundos (15 minutos)
 - **Memory**: 1024 MB
@@ -136,7 +136,7 @@ Role de execução com permissões para:
 ### CloudWatch Log Group
 
 - Retenção: 1 semana
-- Nome: `/aws/lambda/{stage}-ifkpass-backend-{stage}-proxy`
+- Nome: `/aws/lambda/{stage}-ifkpass-api-{stage}-proxy`
 
 ## 🔧 Variáveis de Ambiente
 
@@ -149,7 +149,6 @@ REGION=us-east-1
 ACCOUNT_ID=972210179301
 COGNITO_CLIENT_ID=xxxxx
 COGNITO_CLIENT_SECRET=xxxxx
-RESEND_MAIL_API_KEY=xxxxx
 COGNITO_USER_POOL_ID=xxxxx
 ```
 
@@ -231,7 +230,7 @@ npm run cdk:destroy:dev
 
 ```bash
 npm run cdk:synth:dev
-# O template estará em cdk.out/dev-ifkpass-backend.template.json
+# O template estará em cdk.out/dev-ifkpass-api.template.json
 ```
 
 ### Ver Diferenças Antes do Deploy

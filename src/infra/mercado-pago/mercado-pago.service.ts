@@ -15,12 +15,12 @@ interface MercadoPagoPreferenceResponse {
 
 export class MercadoPagoService implements PaymentGatewayServiceAdapter {
   private readonly accessToken: string;
-  private readonly notificationUrl?: string;
+  private readonly webhookUrl: string;
 
   constructor() {
     const config = new Config();
     this.accessToken = config.get('MERCADO_PAGO_ACCESS_TOKEN');
-    this.notificationUrl = 'https://ifkpass.com/api/v1/mercado-pago/webhook';
+    this.webhookUrl = config.get('MERCADO_PAGO_WEBHOOK_URL');
   }
 
   async createCheckoutPreference(
@@ -42,7 +42,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       },
       metadata: input.metadata,
       external_reference: input.metadata?.userId,
-      notification_url: this.notificationUrl,
+      notification_url: this.webhookUrl,
     };
 
     const response = await fetch(
@@ -94,6 +94,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
     const response = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
       {
+        method: 'GET',
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
         },
@@ -109,13 +110,17 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
 
     const data = (await response.json()) as {
       status: string;
-      metadata?: { userId?: string };
+      metadata?: { userId?: string; user_id?: string };
       external_reference?: string;
     };
 
     return {
       status: this.mapStatus(data.status),
-      userId: data.metadata?.userId ?? data.external_reference ?? undefined,
+      userId:
+        data.metadata?.userId ??
+        data.metadata?.user_id ??
+        data.external_reference ??
+        undefined,
     };
   }
 }

@@ -42,7 +42,7 @@ async function createUser(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(result),
+    body: JSON.stringify(result.value),
   };
 }
 

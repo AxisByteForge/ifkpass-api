@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "users" {
-  name         = "users-${var.environment}"
+  name         = "ifkpass-users"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "Id"
 
@@ -31,10 +31,4 @@ resource "aws_dynamodb_table" "users" {
     hash_key        = "email"
     projection_type = "ALL"
   }
-
-  tags = {
-    Name        = "users-${var.environment}"
-    Environment = var.environment
-  }
-
 }

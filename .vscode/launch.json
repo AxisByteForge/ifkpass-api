@@ -4,6 +4,31 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug Lambda: Webhook",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/mercado-pago-webhook-payload.json"
+      ],  
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug Lambda: PayCard",
       "runtimeExecutable": "npx",
       "runtimeArgs": [

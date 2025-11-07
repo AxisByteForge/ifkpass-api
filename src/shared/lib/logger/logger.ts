@@ -1,32 +1,39 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
-import pino from 'pino';
-
 type LoggerEvent = { body?: string | null } | undefined;
 
-const sanitizeSensitiveFields = (payload: unknown): unknown => {
+type LoggerResponse = Record<string, unknown>;
+
+type LoggerPayload = {
+  request: {
+    body: unknown;
+  };
+  response: LoggerResponse;
+  error?: unknown;
+};
+
+const SENSITIVE_KEYS = new Set([
+  'password',
+  'newPassword',
+  'oldPassword',
+  'confirmPassword',
+]);
+
+const sanitizePayload = (payload: unknown): unknown => {
   if (payload === null || typeof payload !== 'object') {
     return payload;
   }
 
   if (Array.isArray(payload)) {
-    return payload.map(sanitizeSensitiveFields);
+    return payload.map(sanitizePayload);
   }
-
-  const sensitiveKeys = new Set([
-    'password',
-    'newPassword',
-    'oldPassword',
-    'confirmPassword',
-  ]);
 
   return Object.entries(payload).reduce<Record<string, unknown>>(
     (acc, [key, value]) => {
-      if (sensitiveKeys.has(key)) {
+      if (SENSITIVE_KEYS.has(key)) {
         acc[key] = '[REDACTED]';
         return acc;
       }
 
-      acc[key] = sanitizeSensitiveFields(value);
+      acc[key] = sanitizePayload(value);
       return acc;
     },
     {},
@@ -35,37 +42,25 @@ const sanitizeSensitiveFields = (payload: unknown): unknown => {
 
 const logger = (
   event: LoggerEvent,
-  response: APIGatewayProxyResult,
+  response: LoggerResponse,
   error?: unknown,
 ): void => {
   let parsedBody: unknown = undefined;
-  try {
-    parsedBody = event?.body ? JSON.parse(event.body) : undefined;
-  } catch {
-    parsedBody = event?.body;
+
+  if (event?.body) {
+    try {
+      parsedBody = JSON.parse(event.body);
+    } catch {
+      parsedBody = event.body;
+    }
   }
 
-  const logObject: {
-    request: { body: unknown };
-    response: APIGatewayProxyResult;
-    error?: unknown;
-  } = {
+  const logObject: LoggerPayload = {
     request: {
-      body: sanitizeSensitiveFields(parsedBody),
+      body: sanitizePayload(parsedBody),
     },
     response,
   };
-
-  const loggerInstance = pino({
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-    transport:
-      process.env.NODE_ENV !== 'production'
-        ? {
-            target: 'pino-pretty',
-            options: { colorize: true, translateTime: 'SYS:standard' },
-          }
-        : undefined,
-  });
 
   if (error instanceof Error) {
     logObject.error = {
@@ -73,13 +68,11 @@ const logger = (
       name: error.name,
       stack: error.stack,
     };
-    loggerInstance.error(logObject, 'Request failed');
   } else if (error !== undefined) {
     logObject.error = error;
-    loggerInstance.error(logObject, 'Request failed (non-error)');
-  } else {
-    loggerInstance.info(logObject, 'Request handled successfully');
   }
+
+  console.log(JSON.stringify(logObject));
 };
 
 export { logger };

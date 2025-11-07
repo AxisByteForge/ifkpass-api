@@ -36,7 +36,7 @@ async function createProfile(event: APIGatewayProxyEvent) {
 
     return {
       statusCode: 201,
-      body: JSON.stringify(result),
+      body: JSON.stringify(result.value),
     };
   } catch (err) {
     throw new UnauthorizedError(

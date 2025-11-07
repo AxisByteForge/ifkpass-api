@@ -161,6 +161,7 @@ export class PayCardUseCase {
       },
       metadata: {
         userId,
+        user_id: userId,
         rank: rank ?? 'Não informado',
         beltCategory,
       },
