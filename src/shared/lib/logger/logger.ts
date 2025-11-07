@@ -1,10 +1,18 @@
-type LoggerEvent = { body?: string | null } | undefined;
+type LoggerEvent =
+  | {
+      body?: string | null;
+      path?: string;
+      httpMethod?: string;
+    }
+  | undefined;
 
 type LoggerResponse = Record<string, unknown>;
 
 type LoggerPayload = {
   request: {
     body: unknown;
+    path: string | null;
+    method: string | null;
   };
   response: LoggerResponse;
   error?: unknown;
@@ -58,6 +66,8 @@ const logger = (
   const logObject: LoggerPayload = {
     request: {
       body: sanitizePayload(parsedBody),
+      path: event?.path ?? null,
+      method: event?.httpMethod ?? null,
     },
     response,
   };

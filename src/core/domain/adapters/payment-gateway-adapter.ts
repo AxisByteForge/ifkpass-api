@@ -22,6 +22,7 @@ export interface CheckoutPreference {
   id: string;
   initPoint: string;
   sandboxInitPoint?: string;
+  paymentId?: string;
 }
 
 export interface PaymentGatewayServiceAdapter {

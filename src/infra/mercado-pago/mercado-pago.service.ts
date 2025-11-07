@@ -70,6 +70,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       id: data.id,
       initPoint: data.init_point,
       sandboxInitPoint: data.sandbox_init_point,
+      paymentId: data.id,
     };
   }
 
@@ -104,7 +105,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(
-        `Erro ao consultar pagamento: ${response.status} - ${errorBody}`,
+        `Erro ao consultar pagamento: paymentId ${paymentId} - ${response.status} - ${errorBody}`,
       );
     }
 

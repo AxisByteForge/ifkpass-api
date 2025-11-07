@@ -57,7 +57,7 @@ export const handler = async (
       });
 
       const response = await Promise.race([task, timeout]);
-      logger(event, response);
+      logger(event, response as any);
       return response;
     }
 

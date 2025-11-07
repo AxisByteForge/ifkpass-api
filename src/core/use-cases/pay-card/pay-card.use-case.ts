@@ -62,9 +62,25 @@ export class PayCardUseCase {
     const userProps = user.getProps();
     const beltCategory = this.getBeltCategory(userProps.rank);
 
+    const currentPaymentDetails = user.getPaymentDetails();
+
     if (action === 'confirm') {
       if (!paymentStatus) {
         return left(new Error('Status do pagamento é obrigatório.'));
+      }
+
+      if (
+        currentPaymentDetails &&
+        currentPaymentDetails.paymentId === paymentId &&
+        currentPaymentDetails.status === paymentStatus
+      ) {
+        return right({
+          action: 'confirm',
+          alreadyPaid: currentPaymentDetails.alreadyPaid,
+          paymentDetails: currentPaymentDetails,
+          paymentId: currentPaymentDetails.paymentId ?? paymentId,
+          message: 'Pagamento já processado anteriormente.',
+        });
       }
 
       user.updatePaymentDetails({
@@ -89,6 +105,7 @@ export class PayCardUseCase {
         action: 'confirm',
         alreadyPaid: paymentDetails.alreadyPaid,
         paymentDetails,
+        paymentId: paymentDetails.paymentId ?? paymentId,
         message:
           paymentStatus === 'approved'
             ? 'Pagamento confirmado com sucesso.'
@@ -113,6 +130,7 @@ export class PayCardUseCase {
       alreadyPaid: user.hasAlreadyPaid(),
       status: 'pending',
       preferenceId: preference.id,
+      paymentId: preference.paymentId,
       amount,
       currency: CURRENCY,
       discountApplied,
@@ -133,6 +151,7 @@ export class PayCardUseCase {
       initPoint: preference.initPoint,
       sandboxInitPoint: preference.sandboxInitPoint,
       preferenceId: preference.id,
+      paymentId: preference.paymentId,
       alreadyPaid: user.hasAlreadyPaid(),
       paymentDetails,
       discountApplied,

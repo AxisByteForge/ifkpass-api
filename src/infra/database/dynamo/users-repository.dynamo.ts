@@ -26,7 +26,7 @@ class DynamoUserRepository implements UserRepository {
 
   constructor(dynamo: DynamoModule) {
     this.client = dynamo.getClient();
-    this.tableName = `${config.get('USERS_TABLE_NAME')}-${config.get('STAGE')}`;
+    this.tableName = `${config.get('USERS_TABLE_NAME')}`;
   }
 
   public async findByEmail(email: string): Promise<User | null> {

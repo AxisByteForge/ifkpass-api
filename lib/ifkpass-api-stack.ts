@@ -8,23 +8,18 @@ import { Construct } from 'constructs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-export interface IfkpassBackendStackProps extends cdk.StackProps {
-  stage: string;
-}
+const SERVICE_NAME = 'ifkpass-api';
+const REGION = 'us-east-1';
 
 export class IfkpassApiStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: IfkpassBackendStackProps) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps = {}) {
     super(scope, id, props);
-
-    const { stage } = props;
-
-    const region = 'us-east-1';
 
     // IAM Role para a Lambda
     const lambdaRole = new iam.Role(this, 'ProxyLambdaRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      description: `Lambda execution role for ${stage} IFKPass Proxy`,
-      roleName: `ifkpass-${stage}-role`,
+      description: 'Lambda execution role for IFKPass Proxy',
+      roleName: `${SERVICE_NAME}-role`,
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName(
           'service-role/AWSLambdaBasicExecutionRole',
@@ -53,18 +48,17 @@ export class IfkpassApiStack extends cdk.Stack {
     );
 
     const logGroup = new logs.LogGroup(this, 'ProxyLambdaLogGroup', {
-      logGroupName: `/aws/lambda/ifkpass-${stage}`,
+      logGroupName: `/aws/lambda/${SERVICE_NAME}`,
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     const environment: Record<string, string> = {
-      STAGE: stage,
-      NODE_ENV: 'dev',
+      STAGE: SERVICE_NAME,
       PORT: '3333',
-      REGION: region,
+      REGION,
       ACCOUNT_ID: '972210179301',
-      SERVICE: 'ifkpass-api',
+      SERVICE: SERVICE_NAME,
       VERSION: '1.0.0',
       COGNITO_URL: 'https://cognito-idp.us-east-1.amazonaws.com',
       COGNITO_CLIENT_ID: '6qo3c5ha69l7ecrrop64oqr5ev',
@@ -78,7 +72,7 @@ export class IfkpassApiStack extends cdk.Stack {
         'APP_USR-8144186796573046-110618-c771609734368200fbfd35c402d43b80-2971794673',
       MERCADO_PAGO_PUBLIC_KEY: 'APP_USR-8a48b84f-78d4-4419-ab62-71ca336bde20',
       MERCADO_PAGO_WEBHOOK_URL:
-        'https://mh8vkh13sb.execute-api.us-east-1.amazonaws.com/dev/mercado-pago/webhook',
+        'https://k3d4il4asi.execute-api.us-east-1.amazonaws.com/ifkpass-api/mercado-pago/webhook',
     };
 
     const proxyEntry = join(
@@ -87,7 +81,7 @@ export class IfkpassApiStack extends cdk.Stack {
     );
 
     const proxyFunction = new NodejsFunction(this, 'ProxyFunction', {
-      functionName: `ifkpass-${stage}`,
+      functionName: SERVICE_NAME,
       entry: proxyEntry,
       handler: 'handler',
       runtime: lambda.Runtime.NODEJS_22_X,
@@ -102,42 +96,42 @@ export class IfkpassApiStack extends cdk.Stack {
       logGroup,
       role: lambdaRole,
       environment,
-      description: `IFKPass Proxy Function - ${stage}`,
+      description: 'IFKPass Proxy Function',
       retryAttempts: 0,
       architecture: lambda.Architecture.X86_64,
     });
 
     const api = new apigateway.LambdaRestApi(this, 'ProxyApi', {
-      restApiName: `ifkpass-api-${stage}`,
+      restApiName: SERVICE_NAME,
       handler: proxyFunction,
       proxy: true,
       deployOptions: {
-        stageName: stage,
+        stageName: SERVICE_NAME,
       },
     });
 
     new cdk.CfnOutput(this, 'ProxyFunctionName', {
       value: proxyFunction.functionName,
       description: 'Nome da função Lambda Proxy',
-      exportName: `${stage}-ProxyFunctionName`,
+      exportName: `${SERVICE_NAME}-ProxyFunctionName`,
     });
 
     new cdk.CfnOutput(this, 'ProxyFunctionArn', {
       value: proxyFunction.functionArn,
       description: 'ARN da função Lambda Proxy',
-      exportName: `${stage}-ProxyFunctionArn`,
+      exportName: `${SERVICE_NAME}-ProxyFunctionArn`,
     });
 
     new cdk.CfnOutput(this, 'LambdaRoleArn', {
       value: lambdaRole.roleArn,
       description: 'ARN da role de execução da Lambda',
-      exportName: `${stage}-LambdaRoleArn`,
+      exportName: `${SERVICE_NAME}-LambdaRoleArn`,
     });
 
     new cdk.CfnOutput(this, 'ApiGatewayUrl', {
       value: api.url,
       description: 'Endpoint público do API Gateway (Lambda proxy)',
-      exportName: `${stage}-ApiGatewayUrl`,
+      exportName: `${SERVICE_NAME}-ApiGatewayUrl`,
     });
   }
 }

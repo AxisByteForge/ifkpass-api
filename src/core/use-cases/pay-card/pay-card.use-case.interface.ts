@@ -21,6 +21,7 @@ export type PayCardUseCaseResponse = Either<
       initPoint: string;
       sandboxInitPoint?: string;
       preferenceId: string;
+      paymentId?: string;
       alreadyPaid: boolean;
       paymentDetails?: PaymentDetails;
       discountApplied: boolean;
@@ -30,6 +31,7 @@ export type PayCardUseCaseResponse = Either<
       action: 'confirm';
       alreadyPaid: boolean;
       paymentDetails?: PaymentDetails;
+      paymentId?: string;
       message: string;
     }
 >;

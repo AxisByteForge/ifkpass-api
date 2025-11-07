@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const envs = {
   PORT: z.coerce.number().optional(),
-  NODE_ENV: z.enum(['dev', 'test', 'prd']).default('dev'),
   REGION: z.string().default('us-east-1'),
   STAGE: z.string().default('dev'),
   USERS_TABLE_NAME: z.string(),

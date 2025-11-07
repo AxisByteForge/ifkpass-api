@@ -23,7 +23,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -48,7 +48,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -72,9 +72,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "NODE_ENV": "dev"
-      }
     },
     {
       "type": "node",
@@ -98,7 +95,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -123,7 +120,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -148,7 +145,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -173,7 +170,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -198,7 +195,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -223,7 +220,7 @@
         "<node_internals>/**"
       ],
       "env": {
-        "NODE_ENV": "dev"
+        "": "dev"
       }
     },
     {
@@ -247,9 +244,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "NODE_ENV": "dev"
-      }
     },
     {
       "type": "node",

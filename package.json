@@ -1,5 +1,5 @@
 {
-  "name": "ifkpass-backend",
+  "name": "ifkpass-api",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -23,14 +23,9 @@
     "lambda:pay-card": "npm run lambda:local .vscode/payloads/pay-card-payload.json",
     "lambda:mercado-pago-webhook": "npm run lambda:local .vscode/payloads/mercado-pago-webhook-payload.json",
     "cdk:synth": "cdk synth",
-    "cdk:synth:dev": "cdk synth --context stage=dev",
-    "cdk:synth:prd": "cdk synth --context stage=prd",
-    "cdk:deploy:dev": "cdk deploy --context stage=dev --all",
-    "cdk:deploy:prd": "cdk deploy --context stage=prd --all",
-    "cdk:destroy:dev": "cdk destroy --context stage=dev",
-    "cdk:destroy:prd": "cdk destroy --context stage=prd",
-    "cdk:diff:dev": "cdk diff --context stage=dev",
-    "cdk:diff:prd": "cdk diff --context stage=prd",
+    "cdk:deploy": "cdk deploy --all",
+    "cdk:destroy": "cdk destroy --all",
+    "cdk:diff": "cdk diff",
     "cdk:bootstrap": "cdk bootstrap aws://972210179301/us-east-1"
   },
   "engines": {

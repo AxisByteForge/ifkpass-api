@@ -43,6 +43,7 @@ async function payCard(event: APIGatewayProxyEvent) {
     userId: token.Id,
     action: parsed.data.action,
     paymentStatus: parsed.data.paymentStatus,
+    paymentId: parsed.data.paymentId,
   });
 
   if (result.isLeft()) {

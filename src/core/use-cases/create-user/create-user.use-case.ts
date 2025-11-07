@@ -47,7 +47,7 @@ export class CreateUserUseCase {
     await Promise.all(tasks);
 
     return right({
-      message: 'Created',
+      userId: Id,
     });
   }
 }
