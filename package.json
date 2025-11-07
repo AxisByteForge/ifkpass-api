@@ -20,6 +20,8 @@
     "lambda:authenticate": "npm run lambda:local .vscode/payloads/authenticate-payload.json",
     "lambda:reset-password": "npm run lambda:local .vscode/payloads/reset-password-payload.json",
     "lambda:approve-user": "npm run lambda:local .vscode/payloads/approve-user-payload.json",
+    "lambda:pay-card": "npm run lambda:local .vscode/payloads/pay-card-payload.json",
+    "lambda:mercado-pago-webhook": "npm run lambda:local .vscode/payloads/mercado-pago-webhook-payload.json",
     "cdk:synth": "cdk synth",
     "cdk:synth:dev": "cdk synth --context stage=dev",
     "cdk:synth:prd": "cdk synth --context stage=prd",

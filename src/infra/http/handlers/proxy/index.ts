@@ -13,6 +13,8 @@ import { resetPassword } from '../reset-password';
 import { sendPhoto } from '../send-photo';
 import { verifyEmail } from '../verify-email';
 import { approveUser } from '../approve-user';
+import { payCard } from '../pay-card';
+import { mercadoPagoWebhook } from '../mercado-pago/webhook';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -24,7 +26,6 @@ export const handler = async (
   > = {
     POST: {
       '/user': createUser,
-      // '/admin': createAdmin, // TODO: Implement admin handler
       '/user/verify-email': verifyEmail,
       '/user/profile': createProfile,
       '/user/profile/photo': sendPhoto,
@@ -32,6 +33,8 @@ export const handler = async (
       '/user/forgot-password': forgotPassword,
       '/user/reset-password': resetPassword,
       '/admin/approve-user': approveUser,
+      '/user/pay-card': payCard,
+      '/mercado-pago/webhook': mercadoPagoWebhook,
     },
   };
 
@@ -63,13 +66,14 @@ export const handler = async (
       body: JSON.stringify({ message: 'router not found' }),
     };
   } catch (error) {
-    logger(event, { statusCode: 500 }, error);
-    return {
+    const response = {
       statusCode: 500,
       body: JSON.stringify({
         message:
           error instanceof Error ? error.message : 'internal server error',
       }),
     };
+    logger(event, response, error);
+    return response;
   }
 };

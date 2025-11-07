@@ -1,4 +1,5 @@
 import { Either } from 'src/shared/types/either';
+import { KarateRank } from 'src/core/domain/entities/User.entity';
 
 export interface CreateProfileUseCaseRequest {
   Id: string;
@@ -7,7 +8,7 @@ export interface CreateProfileUseCaseRequest {
     city: string;
     cpf: string;
     dojo: string;
-    rank: string;
+    rank: KarateRank;
     sensei: string;
     photoUrl: string;
   };

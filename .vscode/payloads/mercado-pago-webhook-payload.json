@@ -1,0 +1,9 @@
+{
+  "httpMethod": "POST",
+  "path": "/mercado-pago/webhook",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"type\":\"payment\",\"data\":{\"id\":\"123456789\"}}"
+}
+

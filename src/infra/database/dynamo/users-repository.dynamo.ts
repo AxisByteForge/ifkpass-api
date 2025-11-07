@@ -11,7 +11,11 @@ import { toDomain, toPersistence } from 'src/shared/utils/domain-mapper';
 
 import { Config } from 'src/shared/lib/config/env/get-env';
 import { DynamoModule } from 'src/shared/modules/database/dynamo/client';
-import { User, UserStatus } from '../../../core/domain/entities/User.entity';
+import {
+  User,
+  UserStatus,
+  PaymentDetails,
+} from '../../../core/domain/entities/User.entity';
 import { UserRepository } from '../../../core/domain/repositories/UserRepository';
 
 const config = new Config();
@@ -141,6 +145,12 @@ class DynamoUserRepository implements UserRepository {
       expressionAttributeValues[':isAdmin'] = persistenceProps.isAdmin;
     }
 
+    if (persistenceProps.paymentDetails !== undefined) {
+      setExpressions.push('paymentDetails = :paymentDetails');
+      expressionAttributeValues[':paymentDetails'] =
+        persistenceProps.paymentDetails;
+    }
+
     await this.client.send(
       new UpdateItemCommand({
         TableName: this.tableName,
@@ -171,6 +181,31 @@ class DynamoUserRepository implements UserRepository {
         ExpressionAttributeValues: marshall(
           {
             ':status': status,
+            ':updatedAt': new Date().toISOString(),
+          },
+          { removeUndefinedValues: true },
+        ),
+        ConditionExpression: 'attribute_exists(Id)',
+      }),
+    );
+  }
+
+  public async updatePaymentDetails(
+    Id: string,
+    paymentDetails: PaymentDetails,
+  ): Promise<void> {
+    await this.client.send(
+      new UpdateItemCommand({
+        TableName: this.tableName,
+        Key: { Id: { S: Id } },
+        UpdateExpression: `
+          SET 
+            paymentDetails = :paymentDetails,
+            updatedAt = :updatedAt
+        `,
+        ExpressionAttributeValues: marshall(
+          {
+            ':paymentDetails': paymentDetails,
             ':updatedAt': new Date().toISOString(),
           },
           { removeUndefinedValues: true },

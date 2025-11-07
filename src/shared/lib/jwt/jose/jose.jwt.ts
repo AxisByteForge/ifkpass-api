@@ -55,6 +55,12 @@ export async function verifyToken(
       isAdmin,
     };
   } catch (err) {
+    if (err instanceof Error && err.message.includes('exp')) {
+      throw new UnauthorizedError(
+        'Token expirado. Faça login novamente para continuar.',
+      );
+    }
+
     throw new UnauthorizedError(
       err instanceof Error ? err.message : 'Token inválido ou expirado',
     );

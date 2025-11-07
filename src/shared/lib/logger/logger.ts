@@ -1,3 +1,4 @@
+import { APIGatewayProxyResult } from 'aws-lambda';
 import pino from 'pino';
 
 type LoggerEvent = { body?: string | null } | undefined;
@@ -34,7 +35,7 @@ const sanitizeSensitiveFields = (payload: unknown): unknown => {
 
 const logger = (
   event: LoggerEvent,
-  response: Record<string, unknown>,
+  response: APIGatewayProxyResult,
   error?: unknown,
 ): void => {
   let parsedBody: unknown = undefined;
@@ -46,7 +47,7 @@ const logger = (
 
   const logObject: {
     request: { body: unknown };
-    response: Record<string, unknown>;
+    response: APIGatewayProxyResult;
     error?: unknown;
   } = {
     request: {

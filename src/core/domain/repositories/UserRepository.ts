@@ -1,4 +1,4 @@
-import { UserStatus, User } from '../entities/User.entity';
+import { UserStatus, User, PaymentDetails } from '../entities/User.entity';
 
 export interface UserRepository {
   findByEmail(id: string): Promise<User | null>;
@@ -6,4 +6,8 @@ export interface UserRepository {
   create(user: User): Promise<void>;
   update(user: User): Promise<void>;
   updateStatus(Id: string, status: UserStatus): Promise<void>;
+  updatePaymentDetails(
+    Id: string,
+    paymentDetails: PaymentDetails,
+  ): Promise<void>;
 }

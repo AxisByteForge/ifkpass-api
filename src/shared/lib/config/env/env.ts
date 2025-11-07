@@ -14,4 +14,5 @@ export const envs = {
   COGNITO_USER_POOL_ID: z.string(),
   COGNITO_URL: z.string(),
   PROFILE_BUCKET_NAME: z.string(),
+  MERCADO_PAGO_ACCESS_TOKEN: z.string(),
 };
