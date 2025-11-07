@@ -78,7 +78,6 @@ export class PayCardUseCase {
           action: 'confirm',
           alreadyPaid: currentPaymentDetails.alreadyPaid,
           paymentDetails: currentPaymentDetails,
-          paymentId: currentPaymentDetails.paymentId ?? paymentId,
           message: 'Pagamento já processado anteriormente.',
         });
       }
@@ -130,7 +129,6 @@ export class PayCardUseCase {
       alreadyPaid: user.hasAlreadyPaid(),
       status: 'pending',
       preferenceId: preference.id,
-      paymentId: preference.paymentId,
       amount,
       currency: CURRENCY,
       discountApplied,
@@ -151,7 +149,6 @@ export class PayCardUseCase {
       initPoint: preference.initPoint,
       sandboxInitPoint: preference.sandboxInitPoint,
       preferenceId: preference.id,
-      paymentId: preference.paymentId,
       alreadyPaid: user.hasAlreadyPaid(),
       paymentDetails,
       discountApplied,

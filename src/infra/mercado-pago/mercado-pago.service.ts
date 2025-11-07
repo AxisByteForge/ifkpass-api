@@ -70,7 +70,6 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       id: data.id,
       initPoint: data.init_point,
       sandboxInitPoint: data.sandbox_init_point,
-      paymentId: data.id,
     };
   }
 
