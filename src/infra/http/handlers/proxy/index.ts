@@ -15,6 +15,7 @@ import { verifyEmail } from '../verify-email';
 import { approveUser } from '../approve-user';
 import { payCard } from '../pay-card';
 import { mercadoPagoWebhook } from '../mercado-pago/webhook';
+import { AppException } from 'src/shared/types/errors/http-errors';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -66,6 +67,18 @@ export const handler = async (
       body: JSON.stringify({ message: 'router not found' }),
     };
   } catch (error) {
+    if (error instanceof AppException) {
+      const response = {
+        statusCode: error.statusCode,
+        body: JSON.stringify({
+          message: error.message,
+          error: error.error,
+        }),
+      };
+      logger(event, response, error);
+      return response;
+    }
+
     const response = {
       statusCode: 500,
       body: JSON.stringify({

@@ -26,6 +26,15 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
   async createCheckoutPreference(
     input: CreateCheckoutPreferenceInput,
   ): Promise<CheckoutPreference> {
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${this.accessToken}`,
+      'Content-Type': 'application/json',
+    };
+
+    if (input.idempotencyKey) {
+      headers['X-Idempotency-Key'] = input.idempotencyKey;
+    }
+
     const payload = {
       items: [
         {
@@ -49,10 +58,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       'https://api.mercadopago.com/checkout/preferences',
       {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(payload),
       },
     );

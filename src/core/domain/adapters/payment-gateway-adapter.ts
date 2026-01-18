@@ -11,6 +11,7 @@ export interface CreateCheckoutPreferenceInput {
     email: string;
   };
   metadata?: Record<string, string | number | boolean>;
+  idempotencyKey?: string;
 }
 
 export interface PaymentDetails {

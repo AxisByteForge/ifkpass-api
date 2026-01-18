@@ -22,9 +22,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",

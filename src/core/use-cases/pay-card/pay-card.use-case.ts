@@ -61,7 +61,7 @@ export class PayCardUseCase {
 
     const userProps = user.getProps();
     const beltCategory = this.getBeltCategory(userProps.rank);
-
+    const cardId = user.getCardId();
     const currentPaymentDetails = user.getPaymentDetails();
 
     if (action === 'confirm') {
@@ -112,8 +112,9 @@ export class PayCardUseCase {
       });
     }
 
-    const amount = computeAmount(userProps.rank, new Date());
-    const discountApplied = isDiscountAvailable(new Date());
+    const now = new Date();
+    const amount = computeAmount(userProps.rank, now);
+    const discountApplied = isDiscountAvailable(now);
 
     const preference = await this.createCheckoutPreference(
       userProps.name,
@@ -123,6 +124,7 @@ export class PayCardUseCase {
       userId,
       userProps.rank,
       beltCategory,
+      cardId,
     );
 
     user.updatePaymentDetails({
@@ -164,6 +166,7 @@ export class PayCardUseCase {
     userId: string,
     rank: KarateRank | undefined,
     beltCategory: BeltCategory,
+    cardId?: string,
   ): Promise<CheckoutPreference> {
     const preference = await this.paymentGateway.createCheckoutPreference({
       title: 'IFK Pass - Anuidade',
@@ -181,6 +184,7 @@ export class PayCardUseCase {
         rank: rank ?? 'Não informado',
         beltCategory,
       },
+      idempotencyKey: cardId,
     });
 
     return preference;

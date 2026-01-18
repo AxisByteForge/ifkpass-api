@@ -2,7 +2,9 @@
   "httpMethod": "POST",
   "path": "/mercado-pago/webhook",
   "headers": {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "X-Request-Id": "5c035ae6-c1ce-4d47-8bb6-559bc8bc360c",
+    "X-Signature": "ts=1762474383,v1=1b66573b698b0620dd39f922adb9fd670f45c0dfe113e7787167e6e8f64b34d3"
   },
   "body": "{\"type\":\"payment\",\"data\":{\"id\":\"1342269255\"}}"
 }

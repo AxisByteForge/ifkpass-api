@@ -5,7 +5,7 @@ import {
   UnauthorizedError,
 } from 'src/shared/types/errors/http-errors';
 import { verifyToken } from 'src/shared/lib/jwt/jose/jose.jwt';
-import { RequestHeaders } from 'src/shared/types/header.type';
+import { RequestHeaders } from 'src/shared/types/headers.type';
 
 import { makePayCardUseCase } from './factory';
 import { payCardValidate } from './validate';

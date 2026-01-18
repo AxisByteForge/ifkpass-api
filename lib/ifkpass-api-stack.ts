@@ -69,12 +69,12 @@ export class IfkpassApiStack extends cdk.Stack {
       USERS_TABLE_NAME: 'ifkpass-users',
       PROFILE_BUCKET_NAME: 'ifkpass-profile-photos',
       MERCADO_PAGO_ACCESS_TOKEN:
-        'APP_USR-8144186796573046-110618-c771609734368200fbfd35c402d43b80-2971794673',
-      MERCADO_PAGO_PUBLIC_KEY: 'APP_USR-8a48b84f-78d4-4419-ab62-71ca336bde20',
+        'APP_USR-6837657628161682-110618-7a696b9620c26960437502a891b70b7d-258174466',
+      MERCADO_PAGO_PUBLIC_KEY: 'APP_USR-d7bbde4e-ce52-473c-85be-b2e0f9eab73e',
       MERCADO_PAGO_WEBHOOK_URL:
         'https://k3d4il4asi.execute-api.us-east-1.amazonaws.com/ifkpass-api/mercado-pago/webhook',
       MERCADO_PAGO_WEBHOOK_SECRET:
-        'b6c5590bf05bc50cfd4591fc75a47e9355dd933d98588055e4005fb9c464886a',
+        '6abe40b6d32e4015338afd5267c3a3edaa6d7053952c08b8304ff7e3dd77b87e',
     };
 
     const proxyEntry = join(

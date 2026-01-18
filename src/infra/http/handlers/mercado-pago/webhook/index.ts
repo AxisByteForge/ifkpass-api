@@ -2,20 +2,17 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import { makePayCardUseCase } from '../../pay-card/factory';
 import { MercadoPagoService } from 'src/infra/mercado-pago/mercado-pago.service';
-import { Config } from 'src/shared/lib/config/env/get-env';
-import { validateOrigin } from 'src/shared/utils/validate-origin';
-import { RequestHeaders } from 'src/shared/types/headers.type';
+// import { Config } from 'src/shared/lib/config/env/get-env';
 
 const mercadoPagoService = new MercadoPagoService();
 
-const config = new Config();
+// const config = new Config();
 
 function extractPaymentId(
   event: APIGatewayProxyEvent,
   body: any,
 ): string | null {
   if (body?.data?.id) return body.data.id as string;
-  if (body?.id) return body.id as string;
   if (event.queryStringParameters?.id) return event.queryStringParameters.id;
   if (event.queryStringParameters?.['data.id']) {
     return event.queryStringParameters['data.id'];
@@ -25,7 +22,7 @@ function extractPaymentId(
 
 async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
   try {
-    const headers = event.headers;
+    // const headers = event.headers;
     const body = event.body ? JSON.parse(event.body) : {};
 
     const paymentId = extractPaymentId(event, body);
@@ -39,9 +36,9 @@ async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
       };
     }
 
-    const secretKey = config.get('MERCADO_PAGO_WEBHOOK_SECRET');
+    // const secretKey = config.get('MERCADO_PAGO_WEBHOOK_SECRET');
 
-    validateOrigin(headers as RequestHeaders, paymentId ?? '', secretKey);
+    // validateOrigin(headers as RequestHeaders, paymentId ?? '', secretKey);
 
     const payment = await mercadoPagoService.getPayment(paymentId);
 
