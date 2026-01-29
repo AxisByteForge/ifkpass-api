@@ -1,9 +1,0 @@
-CreateUser:
-  handler: dist/presentation/handlers/create-user/index.handler
-  name: ${self:service}-${self:provider.stage}-createUser
-  timeout: 900
-
-VerifyEmail:
-  handler: dist/presentation/handlers/verify-email/index.handler
-  name: ${self:service}-${self:provider.stage}-verifyEmail
-  timeout: 900

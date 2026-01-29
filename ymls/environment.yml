@@ -1,4 +1,0 @@
-STAGE: ${sls:stage}
-REGION: ${self:custom.REGION.${sls:stage}}
-SERVICE: ${self:service}
-VERSION: ${file(./package.json):version}
