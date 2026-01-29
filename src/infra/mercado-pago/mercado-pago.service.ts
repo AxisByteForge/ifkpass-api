@@ -3,9 +3,9 @@ import {
   CreateCheckoutPreferenceInput,
   PaymentDetails,
   PaymentGatewayServiceAdapter,
-  PaymentGatewayStatus,
-} from '../../core/domain/adapters/payment-gateway-adapter';
-import { Config } from '../../shared/lib/config/env/get-env';
+  PaymentGatewayStatus
+} from '@/core/domain/adapters/payment-gateway-adapter';
+import { Config } from '@/shared/lib/config/env/get-env';
 
 interface MercadoPagoPreferenceResponse {
   id: string;
@@ -24,11 +24,11 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
   }
 
   async createCheckoutPreference(
-    input: CreateCheckoutPreferenceInput,
+    input: CreateCheckoutPreferenceInput
   ): Promise<CheckoutPreference> {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.accessToken}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     };
 
     if (input.idempotencyKey) {
@@ -42,16 +42,16 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
           description: input.description,
           quantity: input.quantity,
           currency_id: input.currency,
-          unit_price: input.unitPrice,
-        },
+          unit_price: input.unitPrice
+        }
       ],
       payer: {
         name: input.payer.name,
-        email: input.payer.email,
+        email: input.payer.email
       },
       metadata: input.metadata,
       external_reference: input.metadata?.userId,
-      notification_url: this.webhookUrl,
+      notification_url: this.webhookUrl
     };
 
     const response = await fetch(
@@ -59,14 +59,14 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       {
         method: 'POST',
         headers,
-        body: JSON.stringify(payload),
-      },
+        body: JSON.stringify(payload)
+      }
     );
 
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(
-        `Erro ao criar preferência de pagamento: ${response.status} - ${errorBody}`,
+        `Erro ao criar preferência de pagamento: ${response.status} - ${errorBody}`
       );
     }
 
@@ -75,7 +75,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
     return {
       id: data.id,
       initPoint: data.init_point,
-      sandboxInitPoint: data.sandbox_init_point,
+      sandboxInitPoint: data.sandbox_init_point
     };
   }
 
@@ -102,15 +102,15 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      },
+          Authorization: `Bearer ${this.accessToken}`
+        }
+      }
     );
 
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(
-        `Erro ao consultar pagamento: paymentId ${paymentId} - ${response.status} - ${errorBody}`,
+        `Erro ao consultar pagamento: paymentId ${paymentId} - ${response.status} - ${errorBody}`
       );
     }
 
@@ -126,7 +126,7 @@ export class MercadoPagoService implements PaymentGatewayServiceAdapter {
         data.metadata?.userId ??
         data.metadata?.user_id ??
         data.external_reference ??
-        undefined,
+        undefined
     };
   }
 }

@@ -2,10 +2,10 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import {
   BadRequestException,
-  UnauthorizedError,
-} from 'src/shared/types/errors/http-errors';
-import { verifyToken } from 'src/shared/lib/jwt/jose/jose.jwt';
-import { RequestHeaders } from 'src/shared/types/headers.type';
+  UnauthorizedError
+} from '@/shared/types/errors/http-errors';
+import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+import { RequestHeaders } from '@/shared/types/headers.type';
 
 import { makePayCardUseCase } from './factory';
 import { payCardValidate } from './validate';
@@ -18,7 +18,7 @@ async function payCard(event: APIGatewayProxyEvent) {
     token = await verifyToken(headers.Authorization);
   } catch (err) {
     throw new UnauthorizedError(
-      err instanceof Error ? err.message : 'Token inválido ou expirado',
+      err instanceof Error ? err.message : 'Token inválido ou expirado'
     );
   }
 
@@ -32,8 +32,8 @@ async function payCard(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Validation error',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -43,7 +43,7 @@ async function payCard(event: APIGatewayProxyEvent) {
     userId: token.Id,
     action: parsed.data.action,
     paymentStatus: parsed.data.paymentStatus,
-    paymentId: parsed.data.paymentId,
+    paymentId: parsed.data.paymentId
   });
 
   if (result.isLeft()) {
@@ -52,7 +52,7 @@ async function payCard(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(result.value),
+    body: JSON.stringify(result.value)
   };
 }
 

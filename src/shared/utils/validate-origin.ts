@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { RequestHeaders } from '../types/headers.type';
+import { RequestHeaders } from '@/shared/types/headers.type';
 
 function extractSignatureParts(signature: string): {
   ts: string | null;
@@ -20,7 +20,7 @@ function extractSignatureParts(signature: string): {
 export function validateOrigin(
   headers: RequestHeaders,
   dataID: string,
-  secret: string,
+  secret: string
 ): boolean {
   const signatureHeader = headers['X-Signature'];
   const requestId = headers['X-Request-Id'];

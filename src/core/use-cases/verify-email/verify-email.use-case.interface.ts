@@ -1,7 +1,7 @@
-import { Either } from 'src/shared/types/either';
+import { Either } from '@/shared/types/either';
 
-import { EmailAlreadyVerifiedException } from '../../domain/errors/email-already-verified-exception';
-import { UserAlreadyExistsException } from '../../domain/errors/user-already-exists-exception';
+import { EmailAlreadyVerifiedException } from '@/core/domain/errors/email-already-verified-exception';
+import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
 
 interface VerifyEmailUseCaseRequest {
   email: string;
@@ -13,4 +13,4 @@ type VerifyEmailUseCaseResponse = Either<
   { message: string }
 >;
 
-export { VerifyEmailUseCaseRequest, VerifyEmailUseCaseResponse };
+export type { VerifyEmailUseCaseRequest, VerifyEmailUseCaseResponse };

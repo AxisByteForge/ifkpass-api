@@ -1,5 +1,4 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -10,6 +9,9 @@
     "noImplicitReturns": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "outDir": "./dist",
     "strict": true,
     "removeComments": true,
@@ -18,17 +20,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowJs": false,
-    "types": [
-      "vitest/globals",
-      "vitest",
-      "node"
-    ]
+    "types": ["vitest/globals", "vitest", "node"]
   },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

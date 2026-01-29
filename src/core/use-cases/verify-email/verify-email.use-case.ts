@@ -1,22 +1,22 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   VerifyEmailUseCaseRequest,
-  VerifyEmailUseCaseResponse,
+  VerifyEmailUseCaseResponse
 } from './verify-email.use-case.interface';
-import { UserIdentityProviderServiceAdapter } from '../../domain/adapters/aws-cognito-adapter';
-import { UserNotFoundException } from '../../domain/errors/user-not-found-exception';
-import { UserRepository } from '../../domain/repositories/UserRepository';
+import { UserIdentityProviderServiceAdapter } from '@/core/domain/adapters/aws-cognito-adapter';
+import { UserNotFoundException } from '@/core/domain/errors/user-not-found-exception';
+import { UserRepository } from '@/core/domain/repositories/UserRepository';
 
 export class VerifyEmailUseCase {
   constructor(
     private userRepository: UserRepository,
-    private identityProvider: UserIdentityProviderServiceAdapter,
+    private identityProvider: UserIdentityProviderServiceAdapter
   ) {}
 
   async execute({
     code,
-    email,
+    email
   }: VerifyEmailUseCaseRequest): Promise<VerifyEmailUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -29,7 +29,7 @@ export class VerifyEmailUseCase {
     await this.identityProvider.confirmEmail(id, code);
 
     return right({
-      message: 'Email verified successfully',
+      message: 'Email verified successfully'
     });
   }
 }

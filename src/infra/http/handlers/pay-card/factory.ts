@@ -1,8 +1,8 @@
-import { DynamoModule } from 'src/shared/modules/database/dynamo/client';
+import { DynamoModule } from '@/shared/modules/database/dynamo/client';
 
-import { PayCardUseCase } from '../../../../core/use-cases/pay-card/pay-card.use-case';
-import { DynamoUserRepository } from '../../../database/dynamo/users-repository.dynamo';
-import { MercadoPagoService } from '../../../mercado-pago/mercado-pago.service';
+import { PayCardUseCase } from '@/core/use-cases/pay-card/pay-card.use-case';
+import { DynamoUserRepository } from '@/infra/database/dynamo/users-repository.dynamo';
+import { MercadoPagoService } from '@/infra/mercado-pago/mercado-pago.service';
 
 export function makePayCardUseCase() {
   const dynamoModule = new DynamoModule();

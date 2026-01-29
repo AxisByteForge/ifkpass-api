@@ -1,4 +1,4 @@
-import { Either } from 'src/shared/types/either';
+import { Either } from '@/shared/types/either';
 
 import { UserAlreadyExistsException } from '../../domain/errors/user-already-exists-exception';
 
@@ -12,4 +12,4 @@ type AuthenticateUseCaseResponse = Either<
   { statusCode: number; token: string }
 >;
 
-export { AuthenticateUseCaseRequest, AuthenticateUseCaseResponse };
+export type { AuthenticateUseCaseRequest, AuthenticateUseCaseResponse };

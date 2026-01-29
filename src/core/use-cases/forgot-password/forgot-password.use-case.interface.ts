@@ -1,4 +1,4 @@
-import { Either } from 'src/shared/types/either';
+import { Either } from '@/shared/types/either';
 
 export interface ForgotPasswordUseCaseRequest {
   email: string;

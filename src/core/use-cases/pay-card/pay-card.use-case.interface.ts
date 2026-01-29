@@ -1,4 +1,4 @@
-import { Either } from 'src/shared/types/either';
+import { Either } from '@/shared/types/either';
 import { PaymentDetails } from '../../domain/entities/User.entity';
 
 export type PayCardAction = 'create' | 'confirm';

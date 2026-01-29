@@ -10,14 +10,14 @@ export default defineConfig({
       'dist',
       '**/dist/**',
       '**/vitest.config.*',
-      'src/**/*.interface.*',
+      'src/**/*.interface.*'
     ],
     coverage: {
       reporter: ['text', 'html', 'lcov'],
       include: ['src'],
       exclude: ['**/*.test.ts', '**/*.spec.ts', 'src/**/*.interface.*'],
-      all: true,
-    },
+      all: true
+    }
   },
-  plugins: [swc.vite({ module: { type: 'es6' } })],
+  plugins: [swc.vite({ module: { type: 'es6' } })]
 });

@@ -1,7 +1,7 @@
-import { CreateProfileUseCase } from 'src/core/use-cases/create-profile/create-profile.use-case';
-import { DynamoModule } from 'src/shared/modules/database/dynamo/client';
+import { CreateProfileUseCase } from '@/core/use-cases/create-profile/create-profile.use-case';
+import { DynamoModule } from '@/shared/modules/database/dynamo/client';
 
-import { DynamoUserRepository } from '../../../database/dynamo/users-repository.dynamo';
+import { DynamoUserRepository } from '@/infra/database/dynamo/users-repository.dynamo';
 
 export function makeCreateProfileUseCase() {
   const dynamoModule = new DynamoModule();

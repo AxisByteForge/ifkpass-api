@@ -5,5 +5,5 @@ export const createUserValidate = z.object({
   lastName: z.string(),
   email: z.string().email(),
   password: z.string(),
-  isAdmin: z.boolean().optional().default(false),
+  isAdmin: z.boolean().optional().default(false)
 });

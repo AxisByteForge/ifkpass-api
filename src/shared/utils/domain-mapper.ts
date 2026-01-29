@@ -15,6 +15,6 @@ export function toPersistence(entity: Entity): Record<string, any> {
 
   return {
     ...rest,
-    email: typeof email?.getValue === 'function' ? email.getValue() : email,
+    email: typeof email?.getValue === 'function' ? email.getValue() : email
   };
 }

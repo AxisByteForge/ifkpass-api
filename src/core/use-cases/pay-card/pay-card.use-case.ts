@@ -1,18 +1,18 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   PayCardUseCaseRequest,
-  PayCardUseCaseResponse,
+  PayCardUseCaseResponse
 } from './pay-card.use-case.interface';
 import { UserRepository } from '../../domain/repositories/UserRepository';
 import {
   PaymentGatewayServiceAdapter,
-  CheckoutPreference,
+  CheckoutPreference
 } from '../../domain/adapters/payment-gateway-adapter';
 import {
   KarateRank,
   UserStatus,
-  BeltCategory,
+  BeltCategory
 } from '../../domain/entities/User.entity';
 
 const DISCOUNT_DEADLINE = new Date('2025-03-08T23:59:59.999Z');
@@ -36,14 +36,14 @@ function computeAmount(rank: KarateRank | undefined, now: Date): number {
 export class PayCardUseCase {
   constructor(
     private userRepository: UserRepository,
-    private paymentGateway: PaymentGatewayServiceAdapter,
+    private paymentGateway: PaymentGatewayServiceAdapter
   ) {}
 
   async execute({
     userId,
     action,
     paymentStatus,
-    paymentId,
+    paymentId
   }: PayCardUseCaseRequest): Promise<PayCardUseCaseResponse> {
     const user = await this.userRepository.findById(userId);
 
@@ -54,8 +54,8 @@ export class PayCardUseCase {
     if (user.getStatus() === UserStatus.REJECTED) {
       return left(
         new Error(
-          'Usuário com inscrição rejeitada. Entre em contato com a administração.',
-        ),
+          'Usuário com inscrição rejeitada. Entre em contato com a administração.'
+        )
       );
     }
 
@@ -78,7 +78,7 @@ export class PayCardUseCase {
           action: 'confirm',
           alreadyPaid: currentPaymentDetails.alreadyPaid,
           paymentDetails: currentPaymentDetails,
-          message: 'Pagamento já processado anteriormente.',
+          message: 'Pagamento já processado anteriormente.'
         });
       }
 
@@ -87,14 +87,14 @@ export class PayCardUseCase {
         status: paymentStatus,
         paymentId,
         rank: userProps.rank,
-        beltCategory,
+        beltCategory
       });
 
       const paymentDetails = user.getPaymentDetails();
 
       if (!paymentDetails) {
         return left(
-          new Error('Não foi possível atualizar detalhes de pagamento.'),
+          new Error('Não foi possível atualizar detalhes de pagamento.')
         );
       }
 
@@ -108,7 +108,7 @@ export class PayCardUseCase {
         message:
           paymentStatus === 'approved'
             ? 'Pagamento confirmado com sucesso.'
-            : 'Pagamento não aprovado. Verifique o status na plataforma de pagamento.',
+            : 'Pagamento não aprovado. Verifique o status na plataforma de pagamento.'
       });
     }
 
@@ -124,7 +124,7 @@ export class PayCardUseCase {
       userId,
       userProps.rank,
       beltCategory,
-      cardId,
+      cardId
     );
 
     user.updatePaymentDetails({
@@ -135,7 +135,7 @@ export class PayCardUseCase {
       currency: CURRENCY,
       discountApplied,
       rank: userProps.rank,
-      beltCategory,
+      beltCategory
     });
 
     const paymentDetails = user.getPaymentDetails();
@@ -154,7 +154,7 @@ export class PayCardUseCase {
       alreadyPaid: user.hasAlreadyPaid(),
       paymentDetails,
       discountApplied,
-      discountDeadline: DISCOUNT_DEADLINE.toISOString(),
+      discountDeadline: DISCOUNT_DEADLINE.toISOString()
     });
   }
 
@@ -166,7 +166,7 @@ export class PayCardUseCase {
     userId: string,
     rank: KarateRank | undefined,
     beltCategory: BeltCategory,
-    cardId?: string,
+    cardId?: string
   ): Promise<CheckoutPreference> {
     const preference = await this.paymentGateway.createCheckoutPreference({
       title: 'IFK Pass - Anuidade',
@@ -176,15 +176,15 @@ export class PayCardUseCase {
       unitPrice: amount,
       payer: {
         name: `${name} ${lastName}`.trim(),
-        email,
+        email
       },
       metadata: {
         userId,
         user_id: userId,
         rank: rank ?? 'Não informado',
-        beltCategory,
+        beltCategory
       },
-      idempotencyKey: cardId,
+      idempotencyKey: cardId
     });
 
     return preference;

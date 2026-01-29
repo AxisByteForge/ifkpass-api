@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 export enum UserStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECTED = 'rejected',
+  REJECTED = 'rejected'
 }
 
 export enum KarateRank {
@@ -14,7 +14,7 @@ export enum KarateRank {
   AZUL = 'Azul',
   MARROM = 'Marrom',
   PRETA = 'Preta',
-  VERMELHA = 'Vermelha',
+  VERMELHA = 'Vermelha'
 }
 
 export type BeltCategory = 'colored' | 'black';
@@ -61,7 +61,7 @@ export class User {
   private props: UserProps;
 
   private static normalizeRank(
-    rank?: string | KarateRank,
+    rank?: string | KarateRank
   ): KarateRank | undefined {
     if (!rank) return undefined;
     const value = `${rank}`
@@ -69,7 +69,7 @@ export class User {
       .toLowerCase()
       .replace(/^faixa\s+/, '');
     const match = KARATE_RANK_VALUES.find(
-      (item) => item.toLowerCase() === value,
+      (item) => item.toLowerCase() === value
     );
     return match as KarateRank | undefined;
   }
@@ -79,7 +79,7 @@ export class User {
   }
 
   private static normalizePaymentDetails(
-    details?: Partial<PaymentDetails> | null,
+    details?: Partial<PaymentDetails> | null
   ): PaymentDetails | undefined {
     if (!details) return undefined;
     const normalizedRank = User.normalizeRank(details.rank);
@@ -94,7 +94,7 @@ export class User {
       beltCategory:
         details.beltCategory ?? User.beltCategoryFromRank(normalizedRank),
       rank: normalizedRank,
-      updatedAt: details.updatedAt ?? new Date().toISOString(),
+      updatedAt: details.updatedAt ?? new Date().toISOString()
     };
   }
 
@@ -106,7 +106,7 @@ export class User {
     props: Omit<UserProps, 'createdAt' | 'updatedAt' | 'Id' | 'status'> & {
       isAdmin?: boolean;
       paymentDetails?: PaymentDetails;
-    },
+    }
   ): User {
     const now = new Date().toISOString();
     const Id = randomUUID();
@@ -120,14 +120,14 @@ export class User {
             status: 'approved' as PaymentStatus,
             beltCategory: User.beltCategoryFromRank(normalizedRank),
             rank: normalizedRank,
-            updatedAt: now,
+            updatedAt: now
           }
         : {
             alreadyPaid: false,
             status: 'pending' as PaymentStatus,
             beltCategory: User.beltCategoryFromRank(normalizedRank),
             rank: normalizedRank,
-            updatedAt: now,
+            updatedAt: now
           });
 
     return new User({
@@ -138,7 +138,7 @@ export class User {
       status: props.isAdmin === true ? UserStatus.APPROVED : UserStatus.PENDING,
       isAdmin: props.isAdmin ?? false,
       rank: normalizedRank,
-      paymentDetails: normalizedPaymentDetails,
+      paymentDetails: normalizedPaymentDetails
     });
   }
 
@@ -178,9 +178,9 @@ export class User {
               status: 'approved',
               beltCategory: User.beltCategoryFromRank(normalizedRank),
               rank: normalizedRank,
-              updatedAt: props.updatedAt,
+              updatedAt: props.updatedAt
             }
-          : undefined),
+          : undefined)
     });
   }
 
@@ -230,7 +230,7 @@ export class User {
         status: 'pending' as PaymentStatus,
         rank: this.props.rank,
         beltCategory: User.beltCategoryFromRank(this.props.rank),
-        updatedAt: now,
+        updatedAt: now
       };
     }
 
@@ -254,9 +254,9 @@ export class User {
         beltCategory,
         alreadyPaid: details.alreadyPaid ?? current.alreadyPaid ?? false,
         status: details.status ?? current.status ?? 'pending',
-        updatedAt: now,
+        updatedAt: now
       },
-      updatedAt: now,
+      updatedAt: now
     };
   }
 
@@ -264,7 +264,7 @@ export class User {
     this.props = {
       ...this.props,
       status,
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
   }
 
@@ -285,12 +285,12 @@ export class User {
       ...rest,
       ...(normalizedRank !== undefined ? { rank: normalizedRank } : {}),
       cardId,
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     if (rank !== undefined) {
       const details: Partial<PaymentDetails> = {
-        rank: normalizedRank,
+        rank: normalizedRank
       };
       if (normalizedRank !== undefined) {
         details.beltCategory = User.beltCategoryFromRank(normalizedRank);
@@ -308,7 +308,7 @@ export class User {
       rank: KarateRank;
       sensei: string;
       photoUrl: string;
-    }>,
+    }>
   ): void {
     const { rank, ...rest } = update;
     const now = new Date().toISOString();
@@ -319,12 +319,12 @@ export class User {
       ...this.props,
       ...rest,
       ...(normalizedRank !== undefined ? { rank: normalizedRank } : {}),
-      updatedAt: now,
+      updatedAt: now
     };
 
     if (rank !== undefined) {
       const details: Partial<PaymentDetails> = {
-        rank: normalizedRank,
+        rank: normalizedRank
       };
       if (normalizedRank !== undefined) {
         details.beltCategory = User.beltCategoryFromRank(normalizedRank);

@@ -2,12 +2,12 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import {
   ConflictException,
-  BadRequestException,
-} from 'src/shared/types/errors/http-errors';
+  BadRequestException
+} from '@/shared/types/errors/http-errors';
 
 import { makeRegisterUseCase } from './factory';
 import { createUserValidate } from './validate';
-import { UserAlreadyExistsException } from '../../../../core/domain/errors/user-already-exists-exception';
+import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
 
 async function createUser(event: APIGatewayProxyEvent) {
   const body = JSON.parse(event.body || '{}');
@@ -20,8 +20,8 @@ async function createUser(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Erro de validação',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -42,7 +42,7 @@ async function createUser(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(result.value),
+    body: JSON.stringify(result.value)
   };
 }
 

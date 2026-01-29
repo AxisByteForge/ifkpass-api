@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-import { BadRequestException } from 'src/shared/types/errors/http-errors';
+import { BadRequestException } from '@/shared/types/errors/http-errors';
 
 import { factory } from './factory';
 import { resetPasswordValidate } from './validate';
-import { UserNotFoundException } from '../../../../core/domain/errors/user-not-found-exception';
+import { UserNotFoundException } from '@/core/domain/errors/user-not-found-exception';
 
 async function resetPassword(event: APIGatewayProxyEvent) {
   const body = JSON.parse(event.body || '{}');
@@ -17,8 +17,8 @@ async function resetPassword(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Erro de validação',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -27,7 +27,7 @@ async function resetPassword(event: APIGatewayProxyEvent) {
   const response = await useCase.execute({
     email: parsed.data.email,
     code: parsed.data.code,
-    newPassword: parsed.data.newPassword,
+    newPassword: parsed.data.newPassword
   });
 
   if (response.isLeft()) {
@@ -43,7 +43,7 @@ async function resetPassword(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(response.value),
+    body: JSON.stringify(response.value)
   };
 }
 

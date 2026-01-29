@@ -1,25 +1,26 @@
-import {
+import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
-  Context,
+  Context
 } from 'aws-lambda';
-
-import { logger } from '../../../../shared/lib/logger/logger';
+import { AppException } from '@/shared/types/errors/http-errors';
+import { logger } from '@/shared/lib/logger/logger';
+import { approveUser } from '../approve-user';
 import { authenticate } from '../authenticate';
 import { createProfile } from '../create-profile';
 import { createUser } from '../create-user';
 import { forgotPassword } from '../forgot-password';
+import { mercadoPagoWebhook } from '../mercado-pago/webhook';
+import { payCard } from '../pay-card';
+
 import { resetPassword } from '../reset-password';
 import { sendPhoto } from '../send-photo';
+
 import { verifyEmail } from '../verify-email';
-import { approveUser } from '../approve-user';
-import { payCard } from '../pay-card';
-import { mercadoPagoWebhook } from '../mercado-pago/webhook';
-import { AppException } from 'src/shared/types/errors/http-errors';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
-  context: Context,
+  context: Context
 ): Promise<APIGatewayProxyResult> => {
   const routes: Record<
     string,
@@ -35,8 +36,9 @@ export const handler = async (
       '/user/reset-password': resetPassword,
       '/admin/approve-user': approveUser,
       '/user/pay-card': payCard,
-      '/mercado-pago/webhook': mercadoPagoWebhook,
-    },
+      '/mercado-pago/webhook': mercadoPagoWebhook
+      // Passwordless authentication routes
+    }
   };
 
   try {
@@ -50,10 +52,10 @@ export const handler = async (
           () => {
             resolve({
               statusCode: 408,
-              body: JSON.stringify({ message: 'timeout' }),
+              body: JSON.stringify({ message: 'timeout' })
             });
           },
-          Math.max(0, context.getRemainingTimeInMillis() - 2000),
+          Math.max(0, context.getRemainingTimeInMillis() - 2000)
         );
       });
 
@@ -64,7 +66,7 @@ export const handler = async (
 
     return {
       statusCode: 404,
-      body: JSON.stringify({ message: 'router not found' }),
+      body: JSON.stringify({ message: 'router not found' })
     };
   } catch (error) {
     if (error instanceof AppException) {
@@ -72,8 +74,8 @@ export const handler = async (
         statusCode: error.statusCode,
         body: JSON.stringify({
           message: error.message,
-          error: error.error,
-        }),
+          error: error.error
+        })
       };
       logger(event, response, error);
       return response;
@@ -83,8 +85,8 @@ export const handler = async (
       statusCode: 500,
       body: JSON.stringify({
         message:
-          error instanceof Error ? error.message : 'internal server error',
-      }),
+          error instanceof Error ? error.message : 'internal server error'
+      })
     };
     logger(event, response, error);
     return response;

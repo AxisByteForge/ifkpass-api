@@ -1,5 +1,5 @@
-import { Either } from 'src/shared/types/either';
-import { UserStatus } from 'src/core/domain/entities/User.entity';
+import { Either } from '@/shared/types/either';
+import { UserStatus } from '@/core/domain/entities/User.entity';
 
 export interface ApproveUserUseCaseRequest {
   adminId: string;

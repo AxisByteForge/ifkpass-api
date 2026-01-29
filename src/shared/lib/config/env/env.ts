@@ -14,5 +14,5 @@ export const envs = {
   MERCADO_PAGO_ACCESS_TOKEN: z.string(),
   MERCADO_PAGO_PUBLIC_KEY: z.string(),
   MERCADO_PAGO_WEBHOOK_URL: z.string().url(),
-  MERCADO_PAGO_WEBHOOK_SECRET: z.string(),
+  MERCADO_PAGO_WEBHOOK_SECRET: z.string()
 };

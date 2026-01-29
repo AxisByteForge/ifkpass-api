@@ -16,7 +16,7 @@ export class AppException extends Error {
     return {
       statusCode: this.statusCode,
       message: this.message,
-      error: this.error,
+      error: this.error
     };
   }
 }

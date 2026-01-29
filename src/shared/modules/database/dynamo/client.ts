@@ -9,7 +9,7 @@ export class DynamoModule {
 
   constructor() {
     this.client = new DynamoDBClient({
-      region: config.get('REGION'),
+      region: config.get('REGION')
     });
   }
 

@@ -1,8 +1,8 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   ApproveUserUseCaseRequest,
-  ApproveUserUseCaseResponse,
+  ApproveUserUseCaseResponse
 } from './approve-user.use-case.interface';
 import { UserStatus } from '../../domain/entities/User.entity';
 import { UserNotFoundException } from '../../domain/errors/user-not-found-exception';
@@ -14,7 +14,7 @@ export class ApproveUserUseCase {
   async execute({
     adminId,
     Id,
-    status,
+    status
   }: ApproveUserUseCaseRequest): Promise<ApproveUserUseCaseResponse> {
     const admin = await this.userRepository.findById(adminId);
 
@@ -31,7 +31,7 @@ export class ApproveUserUseCase {
     await this.userRepository.updateStatus(Id, status);
 
     return right({
-      message: `User ${status === UserStatus.APPROVED ? 'approved' : 'rejected'} successfully`,
+      message: `User ${status === UserStatus.APPROVED ? 'approved' : 'rejected'} successfully`
     });
   }
 }

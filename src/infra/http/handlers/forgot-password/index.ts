@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-import { BadRequestException } from 'src/shared/types/errors/http-errors';
+import { BadRequestException } from '@/shared/types/errors/http-errors';
 
 import { factory } from './factory';
 import { forgotPasswordValidate } from './validate';
-import { UserNotFoundException } from '../../../../core/domain/errors/user-not-found-exception';
+import { UserNotFoundException } from '@/core/domain/errors/user-not-found-exception';
 
 async function forgotPassword(event: APIGatewayProxyEvent) {
   const body = JSON.parse(event.body || '{}');
@@ -17,15 +17,15 @@ async function forgotPassword(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Erro de validação',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
   const useCase = factory();
 
   const response = await useCase.execute({
-    email: parsed.data.email,
+    email: parsed.data.email
   });
 
   if (response.isLeft()) {
@@ -41,7 +41,7 @@ async function forgotPassword(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(response.value),
+    body: JSON.stringify(response.value)
   };
 }
 

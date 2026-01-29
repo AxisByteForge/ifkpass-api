@@ -1,8 +1,8 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   AuthenticateUseCaseRequest,
-  AuthenticateUseCaseResponse,
+  AuthenticateUseCaseResponse
 } from './authenticate.use-case.interface';
 import { UserIdentityProviderServiceAdapter } from '../../domain/adapters/aws-cognito-adapter';
 import { UserStatus } from '../../domain/entities/User.entity';
@@ -13,12 +13,12 @@ import { UserRepository } from '../../domain/repositories/UserRepository';
 export class AuthenticateUseCase {
   constructor(
     private userRepository: UserRepository,
-    private identityProvider: UserIdentityProviderServiceAdapter,
+    private identityProvider: UserIdentityProviderServiceAdapter
   ) {}
 
   async execute({
     email,
-    password,
+    password
   }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -33,8 +33,8 @@ export class AuthenticateUseCase {
     if (user.getStatus() === UserStatus.REJECTED) {
       return left(
         new Error(
-          'Sua conta foi rejeitada por um administrador. Entre em contato para mais informações.',
-        ),
+          'Sua conta foi rejeitada por um administrador. Entre em contato para mais informações.'
+        )
       );
     }
 
@@ -44,7 +44,7 @@ export class AuthenticateUseCase {
 
     return right({
       statusCode: 200,
-      token,
+      token
     });
   }
 }

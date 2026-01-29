@@ -1,10 +1,10 @@
-import { UserNotFoundException } from 'src/core/domain/errors/user-not-found-exception';
-import { UserRepository } from 'src/core/domain/repositories/UserRepository';
-import { right } from 'src/shared/types/either';
+import { UserNotFoundException } from '@/core/domain/errors/user-not-found-exception';
+import { UserRepository } from '@/core/domain/repositories/UserRepository';
+import { right } from '@/shared/types/either';
 
 import {
   CreateProfileUseCaseRequest,
-  CreateProfileUseCaseResponse,
+  CreateProfileUseCaseResponse
 } from './create-profile.use-case.interface';
 
 export class CreateProfileUseCase {
@@ -12,7 +12,7 @@ export class CreateProfileUseCase {
 
   async execute({
     Id,
-    body,
+    body
   }: CreateProfileUseCaseRequest): Promise<CreateProfileUseCaseResponse> {
     const user = await this.userRepository.findById(Id);
 
@@ -25,7 +25,7 @@ export class CreateProfileUseCase {
     await this.userRepository.update(user);
 
     return right({
-      message: 'Created',
+      message: 'Created'
     });
   }
 }

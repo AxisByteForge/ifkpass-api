@@ -9,7 +9,7 @@ export class CognitoModule {
 
   constructor() {
     this.client = new CognitoIdentityProviderClient({
-      region: config.get('REGION'),
+      region: config.get('REGION')
     });
   }
 

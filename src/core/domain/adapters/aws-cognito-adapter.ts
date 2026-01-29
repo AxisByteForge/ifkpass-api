@@ -9,6 +9,6 @@ export interface UserIdentityProviderServiceAdapter {
   confirmPasswordReset(
     email: string,
     code: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<void>;
 }

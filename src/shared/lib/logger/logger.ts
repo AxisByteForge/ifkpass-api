@@ -22,7 +22,7 @@ const SENSITIVE_KEYS = new Set([
   'password',
   'newPassword',
   'oldPassword',
-  'confirmPassword',
+  'confirmPassword'
 ]);
 
 const sanitizePayload = (payload: unknown): unknown => {
@@ -44,14 +44,14 @@ const sanitizePayload = (payload: unknown): unknown => {
       acc[key] = sanitizePayload(value);
       return acc;
     },
-    {},
+    {}
   );
 };
 
 const logger = (
   event: LoggerEvent,
   response: LoggerResponse,
-  error?: unknown,
+  error?: unknown
 ): void => {
   let parsedBody: unknown = undefined;
 
@@ -67,16 +67,16 @@ const logger = (
     request: {
       body: sanitizePayload(parsedBody),
       path: event?.path ?? null,
-      method: event?.httpMethod ?? null,
+      method: event?.httpMethod ?? null
     },
-    response,
+    response
   };
 
   if (error instanceof Error) {
     logObject.error = {
       message: error.message,
       name: error.name,
-      stack: error.stack,
+      stack: error.stack
     };
   } else if (error !== undefined) {
     logObject.error = error;

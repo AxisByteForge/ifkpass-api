@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import { makePayCardUseCase } from '../../pay-card/factory';
-import { MercadoPagoService } from 'src/infra/mercado-pago/mercado-pago.service';
+import { MercadoPagoService } from '@/infra/mercado-pago/mercado-pago.service';
 // import { Config } from 'src/shared/lib/config/env/get-env';
 
 const mercadoPagoService = new MercadoPagoService();
@@ -10,7 +10,7 @@ const mercadoPagoService = new MercadoPagoService();
 
 function extractPaymentId(
   event: APIGatewayProxyEvent,
-  body: any,
+  body: any
 ): string | null {
   if (body?.data?.id) return body.data.id as string;
   if (event.queryStringParameters?.id) return event.queryStringParameters.id;
@@ -31,8 +31,8 @@ async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Identificador do pagamento não informado.',
-        }),
+          message: 'Identificador do pagamento não informado.'
+        })
       };
     }
 
@@ -46,8 +46,8 @@ async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Pagamento sem usuário associado.',
-        }),
+          message: 'Pagamento sem usuário associado.'
+        })
       };
     }
 
@@ -56,21 +56,21 @@ async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
       userId: payment.userId,
       action: 'confirm',
       paymentStatus: payment.status,
-      paymentId,
+      paymentId
     });
 
     if (result.isLeft()) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: result.value.message }),
+        body: JSON.stringify({ message: result.value.message })
       };
     }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'Pagamento sincronizado com sucesso.',
-      }),
+        message: 'Pagamento sincronizado com sucesso.'
+      })
     };
   } catch (error) {
     return {
@@ -79,8 +79,8 @@ async function mercadoPagoWebhook(event: APIGatewayProxyEvent) {
         message:
           error instanceof Error
             ? error.message
-            : 'Erro interno ao processar webhook do Mercado Pago.',
-      }),
+            : 'Erro interno ao processar webhook do Mercado Pago.'
+      })
     };
   }
 }

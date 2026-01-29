@@ -1,9 +1,9 @@
-import { DynamoModule } from 'src/shared/modules/database/dynamo/client';
-import { CognitoModule } from 'src/shared/modules/identity-provider/cognito/client';
-import { AuthenticateUseCase } from '../../../../core/use-cases/authenticate/authenticate.use-case';
+import { DynamoModule } from '@/shared/modules/database/dynamo/client';
+import { CognitoModule } from '@/shared/modules/identity-provider/cognito/client';
+import { AuthenticateUseCase } from '@/core/use-cases/authenticate/authenticate.use-case';
 
-import { AwsCognitoService } from '../../../aws/aws-cognito-client';
-import { DynamoUserRepository } from '../../../database/dynamo/users-repository.dynamo';
+import { AwsCognitoService } from '@/infra/aws/aws-cognito-client';
+import { DynamoUserRepository } from '@/infra/database/dynamo/users-repository.dynamo';
 
 export function factory() {
   const dynamoModule = new DynamoModule();
@@ -12,7 +12,7 @@ export function factory() {
   const cognitoService = new AwsCognitoService(cognitoModule);
   const authenticateUseCase = new AuthenticateUseCase(
     profileRepository,
-    cognitoService,
+    cognitoService
   );
   return authenticateUseCase;
 }

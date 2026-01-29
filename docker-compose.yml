@@ -1,31 +1,28 @@
 services:
-  localstack:
-    image: localstack/localstack
-    container_name: localstack
-    ports:
-      - '4566:4566'
+  db:
+    image: postgres:15
+    container_name: pagueopedagio-db
+    restart: unless-stopped
     environment:
-      - SERVICES=dynamodb
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - DEFAULT_REGION=us-east-1
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:5432"
     volumes:
-      - localstack_data:/var/lib/localstack
-
-  dynamodb-admin:
-    image: aaronshaf/dynamodb-admin
-    container_name: dynamodb_admin
-    ports:
-      - '8001:8001'
-    environment:
-      DYNAMO_ENDPOINT: http://localstack:4566
-      AWS_REGION: us-east-1
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      HOST: 0.0.0.0
-      PORT: 8001
-    depends_on:
-      - localstack
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal
 
 volumes:
-  localstack_data:
+  db-data:
+    driver: local
+
+networks:
+  internal:
+    driver: bridge

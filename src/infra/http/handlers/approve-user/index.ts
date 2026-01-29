@@ -3,11 +3,11 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import {
   BadRequestException,
   ForbiddenException,
-  UnauthorizedError,
-} from 'src/shared/types/errors/http-errors';
-import { verifyToken } from 'src/shared/lib/jwt/jose/jose.jwt';
-import { RequestHeaders } from 'src/shared/types/header.type';
-import { UserStatus } from 'src/core/domain/entities/User.entity';
+  UnauthorizedError
+} from '@/shared/types/errors/http-errors';
+import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+import { RequestHeaders } from '@/shared/types/headers.type';
+import { UserStatus } from '@/core/domain/entities/User.entity';
 
 import { makeApproveUserUseCase } from './factory';
 import { approveUserValidate } from './validate';
@@ -20,7 +20,7 @@ async function approveUser(event: APIGatewayProxyEvent) {
     token = await verifyToken(headers.Authorization);
   } catch (err) {
     throw new UnauthorizedError(
-      err instanceof Error ? err.message : 'Token inválido ou expirado',
+      err instanceof Error ? err.message : 'Token inválido ou expirado'
     );
   }
 
@@ -28,7 +28,7 @@ async function approveUser(event: APIGatewayProxyEvent) {
 
   if (!isAdmin) {
     throw new ForbiddenException(
-      'Administrador necessário para aprovar usuários',
+      'Administrador necessário para aprovar usuários'
     );
   }
 
@@ -42,8 +42,8 @@ async function approveUser(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Validation error',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -55,7 +55,7 @@ async function approveUser(event: APIGatewayProxyEvent) {
     status:
       parsed.data.status === 'approved'
         ? UserStatus.APPROVED
-        : UserStatus.REJECTED,
+        : UserStatus.REJECTED
   });
 
   if (result.isLeft()) {
@@ -64,7 +64,7 @@ async function approveUser(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(result.value),
+    body: JSON.stringify(result.value)
   };
 }
 

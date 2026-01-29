@@ -2,14 +2,14 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import {
   ConflictException,
-  BadRequestException,
-} from 'src/shared/types/errors/http-errors';
+  BadRequestException
+} from '@/shared/types/errors/http-errors';
 
 import { factory } from './factory';
 import { authenticateValidate } from './validate';
-import { EmailAlreadyVerifiedException } from '../../../../core/domain/errors/email-already-verified-exception';
-import { UserAlreadyExistsException } from '../../../../core/domain/errors/user-already-exists-exception';
-import { UserNotApprovedException } from '../../../../core/domain/errors/user-not-approved-exception';
+import { EmailAlreadyVerifiedException } from '@/core/domain/errors/email-already-verified-exception';
+import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
+import { UserNotApprovedException } from '@/core/domain/errors/user-not-approved-exception';
 
 async function authenticate(event: APIGatewayProxyEvent) {
   const body = JSON.parse(event.body || '{}');
@@ -22,8 +22,8 @@ async function authenticate(event: APIGatewayProxyEvent) {
       statusCode: 400,
       body: JSON.stringify({
         message: 'Validation Error',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -31,7 +31,7 @@ async function authenticate(event: APIGatewayProxyEvent) {
 
   const response = await useCase.execute({
     email: parsed.data.email,
-    password: parsed.data.password,
+    password: parsed.data.password
   });
 
   if (response.isLeft()) {
@@ -46,8 +46,8 @@ async function authenticate(event: APIGatewayProxyEvent) {
         return {
           statusCode: 403,
           body: JSON.stringify({
-            message: error.message,
-          }),
+            message: error.message
+          })
         };
       default:
         throw new BadRequestException(error.message);
@@ -56,7 +56,7 @@ async function authenticate(event: APIGatewayProxyEvent) {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(response.value),
+    body: JSON.stringify(response.value)
   };
 }
 

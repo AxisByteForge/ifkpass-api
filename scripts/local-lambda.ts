@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import 'dotenv/config';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 
 import { handler } from '../src/infra/http/handlers/proxy';
@@ -32,13 +32,13 @@ async function runLocalLambda() {
       functionVersion: '1',
       invokedFunctionArn: 'arn:aws:lambda:local',
       memoryLimitInMB: '1024',
-      awsRequestId: 'local-' + Date.now(),
+      awsRequestId: `local-${Date.now()}`,
       logGroupName: '/aws/lambda/local',
       logStreamName: 'local',
       getRemainingTimeInMillis: () => 900000, // 15 minutos
       done: () => {},
       fail: () => {},
-      succeed: () => {},
+      succeed: () => {}
     };
 
     // Importa e executa o handler

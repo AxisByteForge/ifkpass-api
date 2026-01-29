@@ -1,23 +1,23 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   ResetPasswordUseCaseRequest,
-  ResetPasswordUseCaseResponse,
+  ResetPasswordUseCaseResponse
 } from './reset-password.use-case.interface';
-import { UserIdentityProviderServiceAdapter } from '../../domain/adapters/aws-cognito-adapter';
-import { UserNotFoundException } from '../../domain/errors/user-not-found-exception';
-import { UserRepository } from '../../domain/repositories/UserRepository';
+import { UserIdentityProviderServiceAdapter } from '@/core/domain/adapters/aws-cognito-adapter';
+import { UserNotFoundException } from '@/core/domain/errors/user-not-found-exception';
+import { UserRepository } from '@/core/domain/repositories/UserRepository';
 
 export class ResetPasswordUseCase {
   constructor(
     private userRepository: UserRepository,
-    private identityProvider: UserIdentityProviderServiceAdapter,
+    private identityProvider: UserIdentityProviderServiceAdapter
   ) {}
 
   async execute({
     email,
     code,
-    newPassword,
+    newPassword
   }: ResetPasswordUseCaseRequest): Promise<ResetPasswordUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -28,7 +28,7 @@ export class ResetPasswordUseCase {
     await this.identityProvider.confirmPasswordReset(email, code, newPassword);
 
     return right({
-      message: 'Senha redefinida com sucesso',
+      message: 'Senha redefinida com sucesso'
     });
   }
 }

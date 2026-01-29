@@ -1,4 +1,8 @@
-import { UserStatus, User, PaymentDetails } from '../entities/User.entity';
+import {
+  UserStatus,
+  User,
+  PaymentDetails
+} from '@/core/domain/entities/User.entity';
 
 export interface UserRepository {
   findByEmail(id: string): Promise<User | null>;
@@ -8,6 +12,6 @@ export interface UserRepository {
   updateStatus(Id: string, status: UserStatus): Promise<void>;
   updatePaymentDetails(
     Id: string,
-    paymentDetails: PaymentDetails,
+    paymentDetails: PaymentDetails
   ): Promise<void>;
 }

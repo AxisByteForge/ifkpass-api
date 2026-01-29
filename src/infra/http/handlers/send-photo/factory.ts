@@ -1,7 +1,7 @@
-import { Config } from 'src/shared/lib/config/env/get-env';
-import { S3Module } from 'src/shared/modules/storage/s3/client';
-import { SendPhotoUseCase } from '../../../../core/use-cases/send-photo/send-photo.use-case';
-import { AwsS3Service } from '../../../aws/aws-s3-client';
+import { Config } from '@/shared/lib/config/env/get-env';
+import { S3Module } from '@/shared/modules/storage/s3/client';
+import { SendPhotoUseCase } from '@/core/use-cases/send-photo/send-photo.use-case';
+import { AwsS3Service } from '@/infra/aws/aws-s3-client';
 
 export function makeSendPhotoUseCase() {
   const s3Module = new S3Module();
@@ -9,7 +9,7 @@ export function makeSendPhotoUseCase() {
   const config = new Config();
   const sendPhotoUseCase = new SendPhotoUseCase(
     s3Service,
-    config.get('PROFILE_BUCKET_NAME'),
+    config.get('PROFILE_BUCKET_NAME')
   );
   return sendPhotoUseCase;
 }

@@ -1,6 +1,6 @@
-import { Either } from 'src/shared/types/either';
+import { Either } from '@/shared/types/either';
 
-import { UserAlreadyExistsException } from '../../domain/errors/user-already-exists-exception';
+import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
 
 export interface CreateUserUseCaseRequest {
   props: {

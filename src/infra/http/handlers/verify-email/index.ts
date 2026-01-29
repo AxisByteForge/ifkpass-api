@@ -1,13 +1,13 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-import { BadRequestException } from 'src/shared/types/errors/http-errors';
+import { BadRequestException } from '@/shared/types/errors/http-errors';
 
 import { factory } from './factory';
 import { verifyEmailValidate } from './validate';
-import { EmailAlreadyVerifiedException } from '../../../../core/domain/errors/email-already-verified-exception';
+import { EmailAlreadyVerifiedException } from '@/core/domain/errors/email-already-verified-exception';
 
 async function verifyEmail(
-  event: APIGatewayProxyEvent,
+  event: APIGatewayProxyEvent
 ): Promise<{ statusCode: number; body: string }> {
   const body = JSON.parse(event.body || '{}');
   const parsed = verifyEmailValidate.safeParse(body);
@@ -19,8 +19,8 @@ async function verifyEmail(
       statusCode: 400,
       body: JSON.stringify({
         message: 'Validation Error',
-        errors: fieldErrors,
-      }),
+        errors: fieldErrors
+      })
     };
   }
 
@@ -28,7 +28,7 @@ async function verifyEmail(
 
   const response = await useCase.execute({
     email: parsed.data.email,
-    code: parsed.data.emailVerificationCode,
+    code: parsed.data.emailVerificationCode
   });
 
   if (response.isLeft()) {
@@ -44,7 +44,7 @@ async function verifyEmail(
 
   return {
     statusCode: 200,
-    body: JSON.stringify(response.value),
+    body: JSON.stringify(response.value)
   };
 }
 

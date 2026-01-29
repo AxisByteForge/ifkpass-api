@@ -9,7 +9,7 @@ export class S3Module {
 
   constructor() {
     this.client = new S3Client({
-      region: config.get('REGION'),
+      region: config.get('REGION')
     });
   }
 

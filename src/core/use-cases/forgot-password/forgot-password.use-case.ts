@@ -1,8 +1,8 @@
-import { left, right } from 'src/shared/types/either';
+import { left, right } from '@/shared/types/either';
 
 import {
   ForgotPasswordUseCaseRequest,
-  ForgotPasswordUseCaseResponse,
+  ForgotPasswordUseCaseResponse
 } from './forgot-password.use-case.interface';
 import { UserIdentityProviderServiceAdapter } from '../../domain/adapters/aws-cognito-adapter';
 import { UserNotFoundException } from '../../domain/errors/user-not-found-exception';
@@ -11,11 +11,11 @@ import { UserRepository } from '../../domain/repositories/UserRepository';
 export class ForgotPasswordUseCase {
   constructor(
     private userRepository: UserRepository,
-    private identityProvider: UserIdentityProviderServiceAdapter,
+    private identityProvider: UserIdentityProviderServiceAdapter
   ) {}
 
   async execute({
-    email,
+    email
   }: ForgotPasswordUseCaseRequest): Promise<ForgotPasswordUseCaseResponse> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -26,7 +26,7 @@ export class ForgotPasswordUseCase {
     await this.identityProvider.forgotPassword(email);
 
     return right({
-      message: 'Código de redefinição de senha enviado para o e-mail',
+      message: 'Código de redefinição de senha enviado para o e-mail'
     });
   }
 }

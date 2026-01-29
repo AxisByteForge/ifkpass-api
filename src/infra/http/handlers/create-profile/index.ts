@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
-import { verifyToken } from 'src/shared/lib/jwt/jose/jose.jwt';
-import { UnauthorizedError } from 'src/shared/types/errors/http-errors';
-import { RequestHeaders } from 'src/shared/types/header.type';
+import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+import { UnauthorizedError } from '@/shared/types/errors/http-errors';
+import { RequestHeaders } from '@/shared/types/headers.type';
 
 import { makeCreateProfileUseCase } from './factory';
 import { profileValidate } from './validate';
@@ -22,8 +22,8 @@ async function createProfile(event: APIGatewayProxyEvent) {
         statusCode: 400,
         body: JSON.stringify({
           message: 'Validation error',
-          errors: fieldErrors,
-        }),
+          errors: fieldErrors
+        })
       };
     }
 
@@ -31,16 +31,16 @@ async function createProfile(event: APIGatewayProxyEvent) {
 
     const result = await useCase.execute({
       Id,
-      body: parsed.data,
+      body: parsed.data
     });
 
     return {
       statusCode: 201,
-      body: JSON.stringify(result.value),
+      body: JSON.stringify(result.value)
     };
   } catch (err) {
     throw new UnauthorizedError(
-      err instanceof Error ? err.message : 'Token inválido ou expirado',
+      err instanceof Error ? err.message : 'Token inválido ou expirado'
     );
   }
 }

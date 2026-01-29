@@ -3,20 +3,20 @@ import {
   UpdateItemCommand,
   QueryCommand,
   GetItemCommand,
-  DynamoDBClient,
+  DynamoDBClient
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
-import { toDomain, toPersistence } from 'src/shared/utils/domain-mapper';
+import { toDomain, toPersistence } from '@/shared/utils/domain-mapper';
 
-import { Config } from 'src/shared/lib/config/env/get-env';
-import { DynamoModule } from 'src/shared/modules/database/dynamo/client';
+import { Config } from '@/shared/lib/config/env/get-env';
+import { DynamoModule } from '@/shared/modules/database/dynamo/client';
 import {
   User,
   UserStatus,
-  PaymentDetails,
-} from '../../../core/domain/entities/User.entity';
-import { UserRepository } from '../../../core/domain/repositories/UserRepository';
+  PaymentDetails
+} from '@/core/domain/entities/User.entity';
+import { UserRepository } from '@/core/domain/repositories/UserRepository';
 
 const config = new Config();
 
@@ -36,10 +36,10 @@ class DynamoUserRepository implements UserRepository {
         IndexName: 'email-index',
         KeyConditionExpression: 'email = :email',
         ExpressionAttributeValues: {
-          ':email': { S: email },
+          ':email': { S: email }
         },
-        Limit: 1,
-      }),
+        Limit: 1
+      })
     );
 
     if (!result.Items || result.Items.length === 0) return null;
@@ -53,8 +53,8 @@ class DynamoUserRepository implements UserRepository {
     const result = await this.client.send(
       new GetItemCommand({
         TableName: this.tableName,
-        Key: { Id: { S: Id } },
-      }),
+        Key: { Id: { S: Id } }
+      })
     );
 
     if (!result.Item) return null;
@@ -70,8 +70,8 @@ class DynamoUserRepository implements UserRepository {
     await this.client.send(
       new PutItemCommand({
         TableName: this.tableName,
-        Item: marshall(persistenceProps, { removeUndefinedValues: true }),
-      }),
+        Item: marshall(persistenceProps, { removeUndefinedValues: true })
+      })
     );
   }
 
@@ -83,12 +83,12 @@ class DynamoUserRepository implements UserRepository {
       'lastName = :lastName',
       'email = :email',
       'updatedAt = :updatedAt',
-      '#status = :status',
+      '#status = :status'
     ];
 
     const expressionAttributeNames: Record<string, string> = {
       '#name': 'name',
-      '#status': 'status',
+      '#status': 'status'
     };
 
     const expressionAttributeValues: Record<string, unknown> = {
@@ -96,7 +96,7 @@ class DynamoUserRepository implements UserRepository {
       ':lastName': persistenceProps.lastName,
       ':email': persistenceProps.email,
       ':updatedAt': persistenceProps.updatedAt,
-      ':status': persistenceProps.status,
+      ':status': persistenceProps.status
     };
 
     if (persistenceProps.birthDate !== undefined) {
@@ -158,10 +158,10 @@ class DynamoUserRepository implements UserRepository {
         UpdateExpression: `SET ${setExpressions.join(', ')}`,
         ExpressionAttributeNames: expressionAttributeNames,
         ExpressionAttributeValues: marshall(expressionAttributeValues, {
-          removeUndefinedValues: true,
+          removeUndefinedValues: true
         }),
-        ConditionExpression: 'attribute_exists(Id)',
-      }),
+        ConditionExpression: 'attribute_exists(Id)'
+      })
     );
   }
 
@@ -176,23 +176,23 @@ class DynamoUserRepository implements UserRepository {
             updatedAt = :updatedAt
         `,
         ExpressionAttributeNames: {
-          '#status': 'status',
+          '#status': 'status'
         },
         ExpressionAttributeValues: marshall(
           {
             ':status': status,
-            ':updatedAt': new Date().toISOString(),
+            ':updatedAt': new Date().toISOString()
           },
-          { removeUndefinedValues: true },
+          { removeUndefinedValues: true }
         ),
-        ConditionExpression: 'attribute_exists(Id)',
-      }),
+        ConditionExpression: 'attribute_exists(Id)'
+      })
     );
   }
 
   public async updatePaymentDetails(
     Id: string,
-    paymentDetails: PaymentDetails,
+    paymentDetails: PaymentDetails
   ): Promise<void> {
     await this.client.send(
       new UpdateItemCommand({
@@ -206,12 +206,12 @@ class DynamoUserRepository implements UserRepository {
         ExpressionAttributeValues: marshall(
           {
             ':paymentDetails': paymentDetails,
-            ':updatedAt': new Date().toISOString(),
+            ':updatedAt': new Date().toISOString()
           },
-          { removeUndefinedValues: true },
+          { removeUndefinedValues: true }
         ),
-        ConditionExpression: 'attribute_exists(Id)',
-      }),
+        ConditionExpression: 'attribute_exists(Id)'
+      })
     );
   }
 }

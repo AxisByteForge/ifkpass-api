@@ -27,7 +27,7 @@ export interface CheckoutPreference {
 
 export interface PaymentGatewayServiceAdapter {
   createCheckoutPreference(
-    input: CreateCheckoutPreferenceInput,
+    input: CreateCheckoutPreferenceInput
   ): Promise<CheckoutPreference>;
   getPayment(paymentId: string): Promise<PaymentDetails>;
 }

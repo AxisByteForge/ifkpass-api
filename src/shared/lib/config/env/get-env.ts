@@ -12,7 +12,7 @@ export class Config {
 
     if (!parsed.success) {
       throw new Error(
-        `Invalid environment variables: ${JSON.stringify(parsed.error.format())}`,
+        `Invalid environment variables: ${JSON.stringify(parsed.error.format())}`
       );
     }
 
