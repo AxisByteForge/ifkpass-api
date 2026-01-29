@@ -1,53 +1,47 @@
-import { left, right } from '@/shared/types/either';
-
+import { randomUUID } from 'node:crypto';
+import type { CreateUserInput } from './create-user.interface';
 import {
-  CreateUserUseCaseRequest,
-  CreateUserUseCaseResponse
-} from './create-user.use-case.interface';
-import { UserIdentityProviderServiceAdapter } from '@/core/domain/adapters/aws-cognito-adapter';
-import { User } from '@/core/domain/entities/User.entity';
-import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
-import { UserRepository } from '@/core/domain/repositories/UserRepository';
+  findUserByEmail,
+  createUserInDb
+} from '@/infra/database/services/user-db.service';
+import {
+  signUpUser,
+  confirmAndPromoteAdmin
+} from '@/infra/database/services/user-auth.service';
 
-export class CreateUserUseCase {
-  constructor(
-    private userRepository: UserRepository,
-    private identityProvider: UserIdentityProviderServiceAdapter
-  ) {}
+const createUser = async (input: CreateUserInput): Promise<string> => {
+  const { name, lastName, email, password, isAdmin = false } = input;
 
-  async execute({
-    props
-  }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
-    const user = User.create({
-      name: props.name,
-      lastName: props.lastName,
-      email: props.email,
-      isAdmin: props.isAdmin ?? false
-    });
-
-    const email = user.getEmail();
-    const Id = user.getId();
-
-    const userAlreadyExists = await this.userRepository.findByEmail(email);
-
-    if (userAlreadyExists) {
-      return left(new UserAlreadyExistsException(email));
-    }
-    await this.identityProvider.signUp(Id, email, props.password);
-
-    const tasks: Array<Promise<unknown>> = [this.userRepository.create(user)];
-
-    if (props.isAdmin) {
-      tasks.push(
-        this.identityProvider.confirmEmailWithoutCode(Id),
-        this.identityProvider.promoteAdmin(Id)
-      );
-    }
-
-    await Promise.all(tasks);
-
-    return right({
-      userId: Id
-    });
+  // Verificar se usuário já existe
+  const userExists = await findUserByEmail(email);
+  if (userExists) {
+    throw new Error(`Usuário com email ${email} já existe`);
   }
-}
+
+  const userId = randomUUID();
+
+  // Criar no Cognito
+  await signUpUser(userId, email, password);
+
+  // Se admin, confirmar e adicionar ao grupo
+  if (isAdmin) {
+    await confirmAndPromoteAdmin(userId);
+  }
+
+  // Salvar no DynamoDB
+  const now = new Date().toISOString();
+  await createUserInDb({
+    Id: userId,
+    name,
+    lastName,
+    email,
+    isAdmin,
+    status: 'pending',
+    createdAt: now,
+    updatedAt: now
+  });
+
+  return userId;
+};
+
+export default createUser;

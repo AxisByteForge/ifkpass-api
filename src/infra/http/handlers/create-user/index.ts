@@ -1,49 +1,48 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { z } from 'zod';
+import { createUser as createUserUseCase } from '@/core/use-cases/create-user/create-user.use-case';
 
-import {
-  ConflictException,
-  BadRequestException
-} from '@/shared/types/errors/http-errors';
+const schema = z.object({
+  name: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(6),
+  isAdmin: z.boolean().optional().default(false)
+});
 
-import { makeRegisterUseCase } from './factory';
-import { createUserValidate } from './validate';
-import { UserAlreadyExistsException } from '@/core/domain/errors/user-already-exists-exception';
-
-async function createUser(event: APIGatewayProxyEvent) {
-  const body = JSON.parse(event.body || '{}');
-  const parsed = createUserValidate.safeParse(body);
-
-  if (!parsed.success) {
-    const { fieldErrors } = parsed.error.flatten();
+export const createUser = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    const body = schema.parse(JSON.parse(event.body || '{}'));
+    const userId = await createUserUseCase(body);
 
     return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Erro de validação',
-        errors: fieldErrors
-      })
+      statusCode: 201,
+      body: JSON.stringify({ userId })
+    };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Erro de validação',
+          errors: error.flatten().fieldErrors
+        })
+      };
+    }
+
+    if (error instanceof Error && error.message.includes('já existe')) {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({ message: error.message })
+      };
+    }
+
+    console.error('Error creating user:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Erro interno ao criar usuário' })
     };
   }
-
-  const useCase = makeRegisterUseCase();
-
-  const result = await useCase.execute({ props: parsed.data });
-
-  if (result.isLeft()) {
-    const error = result.value;
-
-    switch (error.constructor) {
-      case UserAlreadyExistsException:
-        throw new ConflictException(error.message);
-      default:
-        throw new BadRequestException(error.message);
-    }
-  }
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify(result.value)
-  };
-}
-
-export { createUser };
+};
