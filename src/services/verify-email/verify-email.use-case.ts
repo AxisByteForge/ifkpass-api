@@ -1,9 +1,9 @@
 import type {
   VerifyEmailInput,
   VerifyEmailOutput
-} from './verify-email.interface';
-import { findUserById } from '@/infra/database/user-db.service';
-import { confirmEmailCognito } from '@/infra/database/user-auth.service';
+} from './verify-email.use-case.interface';
+import { findUserById } from '@/infra/database/repository/user-db.service';
+import { confirmEmailCognito } from '@/infra/identity-provider/user-auth.service';
 
 export const verifyEmail = async (
   input: VerifyEmailInput

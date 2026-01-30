@@ -1,11 +1,11 @@
-import type {
-  ApproveUserInput,
-  ApproveUserOutput
-} from './approve-user.interface';
 import {
   findUserById,
   updateUserStatus
-} from '@/infra/database/user-db.service';
+} from '@/infra/database/repository/user-db.service';
+import type {
+  ApproveUserInput,
+  ApproveUserOutput
+} from './approve-user.use-case.interface';
 
 export const approveUser = async (
   input: ApproveUserInput

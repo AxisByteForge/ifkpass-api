@@ -10,5 +10,11 @@ export default defineConfig({
   sourcemap: true,
   dts: false,
   clean: true,
-  external: [/^@aws-sdk\//]
+  external: [
+    /^@aws-sdk\//,
+    /@\/infra\/database/,
+    /@\/services\//,
+    /@\/shared\//
+  ],
+  tsconfig: './tsconfig.json'
 });

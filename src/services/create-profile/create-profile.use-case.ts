@@ -1,4 +1,7 @@
-import { findUserById, updateUser } from '@/infra/database/user-db.service';
+import {
+  findUserById,
+  updateUser
+} from '@/infra/database/repository/user-db.service';
 import type {
   CreateProfileInput,
   CreateProfileOutput

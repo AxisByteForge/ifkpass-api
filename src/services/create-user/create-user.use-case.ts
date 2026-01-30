@@ -3,11 +3,11 @@ import { randomUUID } from 'node:crypto';
 import {
   findUserByEmail,
   createUserInDb
-} from '@/infra/database/user-db.service';
+} from '@/infra/database/repository/user-db.service';
 import {
   signUpUser,
   confirmAndPromoteAdmin
-} from '@/infra/database/user-auth.service';
+} from '@/infra/identity-provider/user-auth.service';
 import type { CreateUserInput } from './create-user.use-case.interface';
 
 const createUser = async (input: CreateUserInput): Promise<string> => {
@@ -18,22 +18,19 @@ const createUser = async (input: CreateUserInput): Promise<string> => {
 
   const userId = randomUUID();
 
-  await signUpUser(userId, input.email, input.password);
+  // await signUpUser(userId, input.email, input.password);
 
   if (input.isAdmin) {
     await confirmAndPromoteAdmin(userId);
   }
 
-  const now = new Date().toISOString();
   await createUserInDb({
     Id: userId,
     name: input.name,
     lastName: input.lastName,
     email: input.email,
     isAdmin: input.isAdmin ?? false,
-    status: 'pending',
-    createdAt: now,
-    updatedAt: now
+    status: 'pending'
   });
 
   return userId;

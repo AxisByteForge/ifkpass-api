@@ -1,5 +1,5 @@
-import { forgotPasswordCognito } from '@/infra/database/user-auth.service';
-import { findUserByEmail } from '@/infra/database/user-db.service';
+import { forgotPasswordCognito } from '@/infra/identity-provider/user-auth.service';
+import { findUserByEmail } from '@/infra/database/repository/user-db.service';
 import {
   ForgotPasswordInput,
   ForgotPasswordOutput

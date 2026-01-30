@@ -4,7 +4,7 @@ export const envs = {
   PORT: z.coerce.number().optional(),
   REGION: z.string().default('us-east-1'),
   STAGE: z.string().default('dev'),
-  USERS_TABLE_NAME: z.string(),
+  DATABASE_URL: z.string(),
   COGNITO_ADMINS_GROUP_NAME: z.string(),
   COGNITO_CLIENT_ID: z.string(),
   COGNITO_CLIENT_SECRET: z.string(),

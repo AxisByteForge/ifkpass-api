@@ -1,5 +1,5 @@
-import { signInUser } from '@/infra/database/user-auth.service';
-import { findUserByEmail } from '@/infra/database/user-db.service';
+import { signInUser } from '@/infra/identity-provider/user-auth.service';
+import { findUserByEmail } from '@/infra/database/repository/user-db.service';
 import {
   AuthenticateInput,
   AuthenticateOutput

@@ -1,4 +1,7 @@
-import { findUserById, updateUser } from '@/infra/database/user-db.service';
+import {
+  findUserById,
+  updateUser
+} from '@/infra/database/repository/user-db.service';
 import { PayCardInput, PayCardOutput } from './pay-card.use-case.interface';
 import { createCheckoutPreference } from '@/infra/mercado-pago/mercado-pago.service';
 
@@ -38,8 +41,8 @@ export const payCard = async (input: PayCardInput): Promise<PayCardOutput> => {
     );
   }
 
-  const beltCategory = getBeltCategory(user.rank);
-  const currentPaymentDetails = user.paymentDetails;
+  const beltCategory = getBeltCategory(user.rank || undefined);
+  const currentPaymentDetails = user.paymentDetails as any;
 
   if (input.action === 'complete-payment') {
     if (!input.paymentStatus) {
@@ -61,7 +64,7 @@ export const payCard = async (input: PayCardInput): Promise<PayCardOutput> => {
         alreadyPaid: input.paymentStatus === 'approved',
         status: input.paymentStatus,
         paymentId: input.paymentId,
-        rank: user.rank,
+        rank: user.rank || undefined,
         beltCategory,
         updatedAt: new Date().toISOString()
       }
@@ -77,7 +80,7 @@ export const payCard = async (input: PayCardInput): Promise<PayCardOutput> => {
 
   // Gerar checkout
   const now = new Date();
-  const amount = computeAmount(user.rank, now);
+  const amount = computeAmount(user.rank || undefined, now);
   const discountApplied = isDiscountAvailable(now);
 
   const preference = await createCheckoutPreference({
@@ -95,7 +98,7 @@ export const payCard = async (input: PayCardInput): Promise<PayCardOutput> => {
       rank: user.rank ?? 'Não informado',
       beltCategory
     },
-    idempotencyKey: user.cardId
+    idempotencyKey: user.cardId || undefined
   });
 
   await updateUser(input.userId, {
