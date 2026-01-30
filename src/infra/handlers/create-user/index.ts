@@ -26,7 +26,7 @@ export const createUser = async (
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Erro de validação',
+          message: 'Validation error',
           errors: error.flatten().fieldErrors
         })
       };
@@ -38,8 +38,6 @@ export const createUser = async (
         body: JSON.stringify({ message: error.message })
       };
     }
-
-    console.error('Error creating user:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Erro interno ao criar usuário' })

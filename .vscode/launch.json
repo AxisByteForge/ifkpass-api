@@ -73,31 +73,6 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Lambda: CreateAdmin",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "tsx",
-        "--inspect-brk",
-        "${workspaceFolder}/scripts/local-lambda.ts",
-        "${workspaceFolder}/.vscode/payloads/create-admin-payload.json"
-      ],
-      "console": "integratedTerminal",
-      "preLaunchTask": "build:dev",
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js",
-        "${workspaceFolder}/src/**/*.ts"
-      ],
-      "sourceMaps": true,
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "": "dev"
-      }
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Debug Lambda: VerifyEmail",
       "runtimeExecutable": "npx",
       "runtimeArgs": [

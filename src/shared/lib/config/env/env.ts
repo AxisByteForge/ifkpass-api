@@ -5,6 +5,8 @@ export const envs = {
   REGION: z.string().default('us-east-1'),
   STAGE: z.string().default('dev'),
   DATABASE_URL: z.string(),
+  RESEND_API_KEY: z.string(),
+  RESEND_FROM_EMAIL: z.string(),
   COGNITO_ADMINS_GROUP_NAME: z.string(),
   COGNITO_CLIENT_ID: z.string(),
   COGNITO_CLIENT_SECRET: z.string(),

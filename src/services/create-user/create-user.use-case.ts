@@ -4,25 +4,18 @@ import {
   findUserByEmail,
   createUserInDb
 } from '@/infra/database/repository/user-db.service';
-import {
-  signUpUser,
-  confirmAndPromoteAdmin
-} from '@/infra/identity-provider/user-auth.service';
+
 import type { CreateUserInput } from './create-user.use-case.interface';
+import { UserAlreadyExistsException } from '@/shared/errors/user-already-exists-exception';
 
 const createUser = async (input: CreateUserInput): Promise<string> => {
   const userExists = await findUserByEmail(input.email);
+
   if (userExists) {
-    throw new Error(`Usuário com email ${input.email} já existe`);
+    throw UserAlreadyExistsException(input.email);
   }
 
   const userId = randomUUID();
-
-  // await signUpUser(userId, input.email, input.password);
-
-  if (input.isAdmin) {
-    await confirmAndPromoteAdmin(userId);
-  }
 
   await createUserInDb({
     Id: userId,

@@ -1,39 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@/shared/lib/db';
 import { User, users } from '../schemas/index';
-
-// For backwards compatibility with existing code
-export interface UserDbData {
-  Id: string; // Alias for 'id'
-  name: string;
-  lastName: string;
-  email: string;
-  isAdmin: boolean;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  birthDate?: string;
-  city?: string;
-  cpf?: string;
-  phone?: string;
-  dojo?: string;
-  rank?: string;
-  sensei?: string;
-  photoUrl?: string;
-  cardId?: string;
-  paymentDetails?: {
-    alreadyPaid: boolean;
-    status: string;
-    preferenceId?: string;
-    paymentId?: string;
-    amount?: number;
-    currency?: string;
-    discountApplied?: boolean;
-    beltCategory?: string;
-    rank?: string;
-    updatedAt: string;
-  };
-}
+import { UserDbData } from './user-db.interface';
 
 // Helper to convert User to UserDbData
 const userToUserDbData = (user: User): UserDbData => ({
@@ -82,7 +50,6 @@ export const findUserById = async (Id: string): Promise<UserDbData | null> => {
 export const createUserInDb = async (
   data: Partial<UserDbData>
 ): Promise<void> => {
-  // Convert UserDbData to User type for insertion
   const insertData = {
     id: data.Id,
     name: data.name || '',
