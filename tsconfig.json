@@ -8,11 +8,9 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "./dist",
     "strict": true,
     "removeComments": true,
     "declaration": true,

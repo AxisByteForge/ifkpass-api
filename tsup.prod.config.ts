@@ -6,9 +6,10 @@ export default defineConfig({
   format: ['cjs'],
   target: 'node24',
   platform: 'node',
+  minify: true,
   splitting: false,
-  sourcemap: true,
-  dts: false,
+  sourcemap: false,
+  dts: true,
   clean: true,
   external: [/^@aws-sdk\//]
 });

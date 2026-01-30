@@ -28,7 +28,7 @@
     "lambda:pay-card": "npm run lambda:local .vscode/payloads/pay-card-payload.json",
     "lambda:mercado-pago-webhook": "npm run lambda:local .vscode/payloads/mercado-pago-webhook-payload.json",
     "cdk:synth": "cdk synth",
-    "cdk:deploy": "cdk deploy --all",
+    "cdk:deploy": "npm run build:prod && cdk deploy --all",
     "cdk:destroy": "cdk destroy --all",
     "cdk:diff": "cdk diff"
   },

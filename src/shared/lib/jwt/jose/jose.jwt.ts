@@ -1,15 +1,13 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 
-import { UnauthorizedError } from '../../../../shared/types/errors/http-errors';
+import { UnauthorizedError } from '@/shared/errors/http-errors';
 
-import { Config } from '../../config/env/get-env';
+import { getConfig } from '../../config/env/get-env';
 
-const config = new Config();
-
-const baseUrl = config.get('COGNITO_URL');
-const userPoolId = config.get('COGNITO_USER_POOL_ID');
-const clientId = config.get('COGNITO_CLIENT_ID');
-const adminGroup = config.get('COGNITO_ADMINS_GROUP_NAME');
+const baseUrl = getConfig('COGNITO_URL');
+const userPoolId = getConfig('COGNITO_USER_POOL_ID');
+const clientId = getConfig('COGNITO_CLIENT_ID');
+const adminGroup = getConfig('COGNITO_ADMINS_GROUP_NAME');
 
 const JWKS = createRemoteJWKSet(
   new URL(`${baseUrl}/${userPoolId}/.well-known/jwks.json`)

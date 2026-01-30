@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 
-import { handler } from '../src/infra/http/handlers/proxy';
+import { handler } from '../src/';
 
 // Carrega o handler da Lambda
 async function runLocalLambda() {
