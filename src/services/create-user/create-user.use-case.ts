@@ -8,11 +8,13 @@ import {
 import type { CreateUserInput } from './create-user.use-case.interface';
 import { UserAlreadyExistsException } from '@/shared/errors/user-already-exists-exception';
 
-const createUser = async (input: CreateUserInput): Promise<string> => {
+const createUser = async (
+  input: CreateUserInput
+): Promise<string | UserAlreadyExistsException> => {
   const userExists = await findUserByEmail(input.email);
 
   if (userExists) {
-    throw UserAlreadyExistsException(input.email);
+    return new UserAlreadyExistsException(input.email);
   }
 
   const userId = randomUUID();

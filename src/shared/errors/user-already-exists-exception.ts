@@ -1,5 +1,6 @@
-export const UserAlreadyExistsException = (identifier: string) => {
-  const error = new Error(`User "${identifier}" already exists.`);
-  error.name = 'UserAlreadyExistsException';
-  return error;
-};
+export class UserAlreadyExistsException extends Error {
+  constructor(identifier: string) {
+    super(`User "${identifier}" already exists.`);
+    this.name = 'UserAlreadyExistsException';
+  }
+}

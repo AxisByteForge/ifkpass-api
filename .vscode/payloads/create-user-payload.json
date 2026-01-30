@@ -1,7 +1,7 @@
 {
   "body": "{\"name\":\"John\",\"lastName\":\"Doe\",\"email\":\"barretoruan77@gmail.com\",\"password\":\"ifkPass@Admin2025\"}",
   "httpMethod": "POST",
-  "path": "/user",
+  "path": "/api/v1/users/signup",
   "headers": {
     "Content-Type": "application/json"
   },

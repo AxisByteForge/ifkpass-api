@@ -1,5 +1,6 @@
-export const UserNotFoundException = (identifier: string) => {
-  const error = new Error(`User "${identifier}" not found.`);
-  error.name = 'UserNotFoundException';
-  return error;
-};
+export class UserNotFoundException extends Error {
+  constructor(identifier: string) {
+    super(`User "${identifier}" not found.`);
+    this.name = 'UserNotFoundException';
+  }
+}

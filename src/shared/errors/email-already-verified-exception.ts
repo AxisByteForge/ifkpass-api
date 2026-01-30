@@ -1,5 +1,6 @@
-export const EmailAlreadyVerifiedException = (email: string) => {
-  const error = new Error(`Email not verified: ${email}`);
-  error.name = 'EmailNotVerifiedException';
-  return error;
-};
+export class EmailAlreadyVerifiedException extends Error {
+  constructor(email: string) {
+    super(`Email already verified: ${email}`);
+    this.name = 'EmailAlreadyVerifiedException';
+  }
+}

@@ -6,6 +6,7 @@ import type {
   CreateProfileInput,
   CreateProfileOutput
 } from './create-profile.use-case.interface.ts';
+import { UserNotFoundException } from '@/shared/errors/user-not-found-exception.js';
 
 export const createProfile = async (
   input: CreateProfileInput
@@ -13,7 +14,7 @@ export const createProfile = async (
   const user = await findUserById(input.Id);
 
   if (!user) {
-    throw new Error('Usuário não encontrado');
+    throw new UserNotFoundException(input.Id);
   }
 
   await updateUser(input.Id, {

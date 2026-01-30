@@ -53,7 +53,7 @@ const logger = (
   response: LoggerResponse,
   error?: unknown
 ): void => {
-  let parsedBody: unknown = undefined;
+  let parsedBody: unknown;
 
   if (event?.body) {
     try {
