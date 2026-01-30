@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { createUser as createUserUseCase } from '@/services/create-user/create-user.use-case';
 import { AppException, ConflictException } from '@/shared/errors/http-errors';
 
-import { logger } from '@/shared/utils/logger/logger';
+import { logger } from '@/shared/utils/logger';
 import { UserAlreadyExistsException } from '@/shared/errors/user-already-exists-exception';
 
 export const schema = z.object({
