@@ -1,9 +1,0 @@
-{
-  "body": "{\"email\":\"barretoruan77@gmail.com\",\"emailVerificationCode\":\"707958\"}",
-  "httpMethod": "POST",
-  "path": "/api/v1/users/verify-email",
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "isBase64Encoded": false
-}

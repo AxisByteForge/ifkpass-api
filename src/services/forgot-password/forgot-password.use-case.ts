@@ -1,9 +1,10 @@
 import { forgotPasswordCognito } from '@/infra/identity-provider/user-auth.service';
-import { findUserByEmail } from '@/infra/database/repository/user-db.service';
+
 import {
   ForgotPasswordInput,
   ForgotPasswordOutput
 } from './forgot-password.use-case.interface';
+import { findUserByEmail } from '@/infra/database/repository/user/user-db.service';
 
 export const forgotPassword = async (
   input: ForgotPasswordInput

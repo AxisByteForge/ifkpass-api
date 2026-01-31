@@ -1,5 +1,4 @@
-import { signInUser } from '@/infra/identity-provider/user-auth.service';
-import { findUserByEmail } from '@/infra/database/repository/user-db.service';
+import { findUserByEmail } from '@/infra/database/repository/user/user-db.service';
 import {
   AuthenticateInput,
   AuthenticateOutput
@@ -24,7 +23,7 @@ export const authenticate = async (
     );
   }
 
-  const token = await signInUser(user.Id, input.password);
+  const token = 'ok';
 
   return {
     statusCode: 200,

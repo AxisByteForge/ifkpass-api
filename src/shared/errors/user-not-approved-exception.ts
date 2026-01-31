@@ -1,6 +1,6 @@
-export class UserNotApprovedException extends Error {
-  constructor() {
-    super('User account is pending approval from an administrator.');
-    this.name = 'UserNotApprovedException';
+export class UserNotApprovedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UserNotApprovedError';
   }
 }

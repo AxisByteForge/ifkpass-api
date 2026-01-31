@@ -14,7 +14,7 @@ import { payCard } from './handlers/pay-card';
 
 import { sendPhoto } from './handlers/send-photo';
 
-import { verifyEmail } from './handlers/verify-email';
+import { signinUser } from './handlers/signin';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -24,7 +24,7 @@ export const handler = async (
     POST: {
       '/api/v1/admins/approve': approveUser,
       '/api/v1/users/signup': createUser,
-      '/api/v1/users/signin': verifyEmail,
+      '/api/v1/users/signin': signinUser,
       '/api/v1/users/profile': createProfile,
       '/api/v1/users/profile/photo': sendPhoto,
       '/api/v1/users/auth': authenticate,

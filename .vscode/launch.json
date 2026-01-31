@@ -73,16 +73,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Lambda: VerifyEmail",
+      "name": "Debug Lambda: Signin User",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "tsx",
         "--inspect-brk",
         "${workspaceFolder}/scripts/local-lambda.ts",
-        "${workspaceFolder}/.vscode/payloads/verify-email-payload.json"
+        "${workspaceFolder}/.vscode/payloads/signin-payload.json"
       ],
       "console": "integratedTerminal",
-      "preLaunchTask": "build:dev",
+      "preLaunchTask": "build:dev", 
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js",
         "${workspaceFolder}/src/**/*.ts"
@@ -91,9 +91,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",

@@ -1,7 +1,7 @@
 import {
   findUserById,
   updateUserStatus
-} from '@/infra/database/repository/user-db.service';
+} from '@/infra/database/repository/user/user-db.service';
 import type {
   ApproveUserInput,
   ApproveUserOutput

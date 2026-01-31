@@ -1,6 +1,6 @@
-export class EmailAlreadyVerifiedException extends Error {
-  constructor(email: string) {
-    super(`Email already verified: ${email}`);
-    this.name = 'EmailAlreadyVerifiedException';
+export class EmailAlreadyVerifiedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EmailAlreadyVerifiedError';
   }
 }

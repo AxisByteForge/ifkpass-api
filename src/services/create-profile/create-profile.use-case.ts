@@ -1,12 +1,12 @@
 import {
   findUserById,
   updateUser
-} from '@/infra/database/repository/user-db.service';
-import type {
+} from '@/infra/database/repository/user/user-db.service';
+import { UserNotFoundError } from '@/shared/errors/user-not-found-exception';
+import {
   CreateProfileInput,
   CreateProfileOutput
-} from './create-profile.use-case.interface.ts';
-import { UserNotFoundException } from '@/shared/errors/user-not-found-exception.js';
+} from './create-profile.use-case.interface';
 
 export const createProfile = async (
   input: CreateProfileInput
@@ -14,7 +14,7 @@ export const createProfile = async (
   const user = await findUserById(input.Id);
 
   if (!user) {
-    throw new UserNotFoundException(input.Id);
+    throw new UserNotFoundError(input.Id);
   }
 
   await updateUser(input.Id, {

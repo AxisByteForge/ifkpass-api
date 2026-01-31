@@ -1,9 +1,10 @@
 import { confirmPasswordResetCognito } from '@/infra/identity-provider/user-auth.service';
-import { findUserByEmail } from '@/infra/database/repository/user-db.service';
+
 import {
   ResetPasswordInput,
   ResetPasswordOutput
 } from './reset-password.use-case.interface';
+import { findUserByEmail } from '@/infra/database/repository/user/user-db.service';
 
 export const resetPassword = async (
   input: ResetPasswordInput

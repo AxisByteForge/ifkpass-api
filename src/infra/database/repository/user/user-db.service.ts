@@ -1,10 +1,11 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@/shared/lib/db';
-import { User, users } from '../schemas/index';
+
 import { UserDbData } from './user-db.interface';
+import { User, users } from '../../schemas';
 
 // Helper to convert User to UserDbData
-const userToUserDbData = (user: User): UserDbData => ({
+const userDbData = (user: User): UserDbData => ({
   Id: user.id,
   name: user.name || '',
   lastName: user.lastName || '',
@@ -36,7 +37,7 @@ export const findUserByEmail = async (
 
   if (!user || user.length === 0) return null;
 
-  return userToUserDbData(user[0]);
+  return userDbData(user[0]);
 };
 
 export const findUserById = async (Id: string): Promise<UserDbData | null> => {
@@ -44,7 +45,7 @@ export const findUserById = async (Id: string): Promise<UserDbData | null> => {
 
   if (!user || user.length === 0) return null;
 
-  return userToUserDbData(user[0]);
+  return userDbData(user[0]);
 };
 
 export const createUserInDb = async (

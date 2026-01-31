@@ -1,33 +1,33 @@
+import { signinUserService } from '@/services/signin/signin';
+import { AppException, BadRequestException } from '@/shared/errors/http-errors';
+import { TooManyTokensError } from '@/shared/errors/too-many-tokens-error';
+import { logger } from '@/shared/utils/logger';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { z } from 'zod';
-import { createUser as createUserUseCase } from '@/services/create-user/create-user.use-case';
-import { AppException, ConflictException } from '@/shared/errors/http-errors';
 
-import { logger } from '@/shared/utils/logger';
-import { UserAlreadyExistsError } from '@/shared/errors/user-already-exists-exception';
-
-export const schema = z.object({
-  name: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  isAdmin: z.boolean().optional().default(false)
+const schema = z.object({
+  email: z.string().email()
 });
 
-export const createUser = async (
+export const signinUser = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
     const body = schema.parse(JSON.parse(event.body || '{}'));
-    const result = await createUserUseCase(body);
+    const result = await signinUserService({
+      email: body.email
+    });
 
-    if (result instanceof UserAlreadyExistsError) {
-      throw new ConflictException(result.message);
+    if (result instanceof TooManyTokensError) {
+      return {
+        statusCode: 429,
+        body: JSON.stringify(result.toJSON())
+      };
     }
 
     return {
-      statusCode: 201,
-      body: JSON.stringify({ userId: result })
+      statusCode: 200,
+      body: JSON.stringify(result)
     };
   } catch (error) {
     if (error instanceof AppException) {

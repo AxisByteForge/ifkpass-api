@@ -1,20 +1,18 @@
-import { randomUUID } from 'node:crypto';
-
 import {
   findUserByEmail,
   createUserInDb
-} from '@/infra/database/repository/user-db.service';
-
-import type { CreateUserInput } from './create-user.use-case.interface';
-import { UserAlreadyExistsException } from '@/shared/errors/user-already-exists-exception';
+} from '@/infra/database/repository/user/user-db.service';
+import { randomUUID } from 'node:crypto';
+import { CreateUserInput } from './create-user.use-case.interface';
+import { UserAlreadyExistsError } from '@/shared/errors/user-already-exists-exception';
 
 const createUser = async (
   input: CreateUserInput
-): Promise<string | UserAlreadyExistsException> => {
+): Promise<string | UserAlreadyExistsError> => {
   const userExists = await findUserByEmail(input.email);
 
   if (userExists) {
-    return new UserAlreadyExistsException(input.email);
+    return new UserAlreadyExistsError(input.email);
   }
 
   const userId = randomUUID();

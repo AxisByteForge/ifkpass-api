@@ -1,7 +1,7 @@
 import {
   findUserById,
   updateUser
-} from '@/infra/database/repository/user-db.service';
+} from '@/infra/database/repository/user/user-db.service';
 import { PayCardInput, PayCardOutput } from './pay-card.use-case.interface';
 import { createCheckoutPreference } from '@/infra/mercado-pago/mercado-pago.service';
 
