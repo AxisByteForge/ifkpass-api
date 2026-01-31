@@ -3,7 +3,7 @@ import { getConfig } from '@/shared/lib/config/env/get-env';
 import {
   SendPhotoInput,
   SendPhotoOutput
-} from './send-photo.use-case.interface';
+} from './send-photo.service.interface';
 
 const bucketName = getConfig('PROFILE_BUCKET_NAME');
 

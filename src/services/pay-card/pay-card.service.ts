@@ -2,7 +2,7 @@ import {
   findUserById,
   updateUser
 } from '@/infra/database/repository/user/user-db.service';
-import { PayCardInput, PayCardOutput } from './pay-card.use-case.interface';
+import { PayCardInput, PayCardOutput } from './pay-card.service.interface';
 import { createCheckoutPreference } from '@/infra/mercado-pago/mercado-pago.service';
 
 const year = new Date().getFullYear();

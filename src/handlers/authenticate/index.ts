@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { z } from 'zod';
-import { authenticate as authenticateService } from '@/services/authenticate/authenticate.use-case';
+import { authenticate as authenticateService } from '@/services/authenticate/authenticate.service';
 
 const schema = z.object({
   email: z.string().email(),

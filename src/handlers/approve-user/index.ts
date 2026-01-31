@@ -6,7 +6,7 @@ import {
   ForbiddenException
 } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
-import { approveUser as approveUserService } from '@/services/approve-user/approve-user.use-case';
+import { approveUser as approveUserService } from '@/services/approve-user/approve-user.service';
 
 const schema = z.object({
   Id: z.string(),

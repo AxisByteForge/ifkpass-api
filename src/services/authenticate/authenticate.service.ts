@@ -2,7 +2,7 @@ import { findUserByEmail } from '@/infra/database/repository/user/user-db.servic
 import {
   AuthenticateInput,
   AuthenticateOutput
-} from './authenticate.use-case.interface';
+} from './authenticate.service.interface';
 
 export const authenticate = async (
   input: AuthenticateInput

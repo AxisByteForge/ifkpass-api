@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
 import { UnauthorizedError } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
-import { createProfile as createProfileService } from '@/services/create-profile/create-profile.use-case';
+import { createProfile as createProfileService } from '@/services/create-profile/create-profile.service';
 
 const schema = z.object({
   birthDate: z.string(),

@@ -3,7 +3,7 @@ import {
   createUserInDb
 } from '@/infra/database/repository/user/user-db.service';
 import { randomUUID } from 'node:crypto';
-import { CreateUserInput } from './create-user.use-case.interface';
+import { CreateUserInput } from './create-user.service.interface';
 import { UserAlreadyExistsError } from '@/shared/errors/user-already-exists-exception';
 
 const createUser = async (

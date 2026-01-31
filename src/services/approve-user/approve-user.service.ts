@@ -5,7 +5,7 @@ import {
 import type {
   ApproveUserInput,
   ApproveUserOutput
-} from './approve-user.use-case.interface';
+} from './approve-user.service.interface';
 
 export const approveUser = async (
   input: ApproveUserInput

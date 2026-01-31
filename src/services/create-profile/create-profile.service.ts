@@ -6,7 +6,7 @@ import { UserNotFoundError } from '@/shared/errors/user-not-found-exception';
 import {
   CreateProfileInput,
   CreateProfileOutput
-} from './create-profile.use-case.interface';
+} from './create-profile.service.interface';
 
 export const createProfile = async (
   input: CreateProfileInput

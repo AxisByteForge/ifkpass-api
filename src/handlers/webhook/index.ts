@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
 import { getPayment } from '@/infra/mercado-pago/mercado-pago.service';
-import { payCard } from '@/services/pay-card/pay-card.use-case';
+import { payCard } from '@/services/pay-card/pay-card.service';
 
 function extractPaymentId(
   event: APIGatewayProxyEvent,

@@ -10,7 +10,7 @@ import {
 import { findUserByEmail } from '@/infra/database/repository/user/user-db.service';
 import { generateCode } from '@/shared/utils/generateCode';
 import { getTokenExpiresAt } from '@/shared/utils/getTokenExpiresAt';
-import { SigninInput, SigninOutput } from './signin.use-case.interface';
+import { SigninInput, SigninOutput } from './signin.service.interface';
 
 export const signinUserService = async (
   input: SigninInput

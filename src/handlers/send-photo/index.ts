@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
 import { UnauthorizedError } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
-import { sendPhoto as sendPhotoService } from '@/services/send-photo/send-photo.use-case';
+import { sendPhoto as sendPhotoService } from '@/services/send-photo/send-photo.service';
 
 export const sendPhoto = async (
   event: APIGatewayProxyEvent

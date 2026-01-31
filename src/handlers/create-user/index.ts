@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { z } from 'zod';
-import { createUser as createUserUseCase } from '@/services/create-user/create-user.use-case';
+import { createUser as createUserUseCase } from '@/services/create-user/create-user.service';
 import { AppException, ConflictException } from '@/shared/errors/http-errors';
 
 import { logger } from '@/shared/utils/logger';

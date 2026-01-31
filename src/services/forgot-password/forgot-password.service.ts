@@ -3,7 +3,7 @@ import { forgotPasswordCognito } from '@/infra/identity-provider/user-auth.servi
 import {
   ForgotPasswordInput,
   ForgotPasswordOutput
-} from './forgot-password.use-case.interface';
+} from './forgot-password.service.interface';
 import { findUserByEmail } from '@/infra/database/repository/user/user-db.service';
 
 export const forgotPassword = async (

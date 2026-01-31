@@ -1,5 +1,5 @@
-import { signinUserService } from '@/services/signin/signin';
-import { AppException, BadRequestException } from '@/shared/errors/http-errors';
+import { signinUserService } from '@/services/signin/signin-service';
+import { AppException } from '@/shared/errors/http-errors';
 import { TooManyTokensError } from '@/shared/errors/too-many-tokens-error';
 import { logger } from '@/shared/utils/logger';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
