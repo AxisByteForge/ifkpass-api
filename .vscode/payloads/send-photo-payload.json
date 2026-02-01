@@ -1,6 +1,6 @@
 {
   "body": "",
-  "path": "/user/profile/photo",
+  "path": "/api/v1/users/profile/photo",
   "httpMethod": "POST",
   "headers": {
     "Content-Type": "application/json",

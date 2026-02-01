@@ -1,0 +1,9 @@
+{
+  "body": "{\"email\":\"admin_teste@mail.com\",\"code\":\"928525\"}",
+  "httpMethod": "POST",
+  "path": "/api/v1/users/auth",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "isBase64Encoded": false
+}

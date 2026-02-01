@@ -1,6 +1,6 @@
 {
   "body": "{\"cpf\":\"123.456.789-00\",\"birthDate\":\"1990-01-01\",\"city\":\"São Paulo\",\"dojo\":\"Dojo Central\",\"rank\":\"Preta\",\"sensei\":\"Tanaka\",\"photoUrl\":\"https://ifkpass-profile-photos.s3.us-east-1.amazonaws.com/users/07bb9097-d831-4774-91a3-691cbb2c735a/profile-photo.jpg\"}",
-  "path": "/user/profile",
+  "path": "/api/v1/users/profile",
   "httpMethod": "POST",
   "headers": {
     "Content-Type": "application/json",

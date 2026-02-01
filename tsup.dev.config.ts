@@ -1,14 +1,20 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/infra/http/handlers/proxy/index.ts'],
+  entry: ['src/index.ts'],
   outDir: 'dist',
   format: ['cjs'],
-  target: 'node22',
+  target: 'node24',
   platform: 'node',
   splitting: false,
   sourcemap: true,
   dts: false,
   clean: true,
-  external: [/^@aws-sdk\//],
+  external: [
+    /^@aws-sdk\//,
+    /@\/infra\/database/,
+    /@\/services\//,
+    /@\/shared\//
+  ],
+  tsconfig: './tsconfig.json'
 });

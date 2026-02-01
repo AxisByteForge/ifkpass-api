@@ -11,7 +11,7 @@
         "--inspect-brk",
         "${workspaceFolder}/scripts/local-lambda.ts",
         "${workspaceFolder}/.vscode/payloads/mercado-pago-webhook-payload.json"
-      ],  
+      ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
       "outFiles": [
@@ -44,9 +44,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -73,13 +70,13 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Lambda: CreateAdmin",
+      "name": "Debug Lambda: Signin User",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "tsx",
         "--inspect-brk",
         "${workspaceFolder}/scripts/local-lambda.ts",
-        "${workspaceFolder}/.vscode/payloads/create-admin-payload.json"
+        "${workspaceFolder}/.vscode/payloads/signin-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
@@ -91,20 +88,17 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Lambda: VerifyEmail",
+      "name": "Debug Lambda: Signin Admin",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "tsx",
         "--inspect-brk",
         "${workspaceFolder}/scripts/local-lambda.ts",
-        "${workspaceFolder}/.vscode/payloads/verify-email-payload.json"
+        "${workspaceFolder}/.vscode/payloads/signin-admin-payload.json"
       ],
       "console": "integratedTerminal",
       "preLaunchTask": "build:dev",
@@ -116,9 +110,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -141,9 +132,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -166,9 +154,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -191,9 +176,28 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: Authenticate Admin",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/authenticate-admin-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
     },
     {
       "type": "node",
@@ -216,9 +220,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",

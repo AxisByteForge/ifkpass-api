@@ -1,18 +1,16 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 
-import { UnauthorizedError } from 'src/shared/types/errors/http-errors';
+import { UnauthorizedError } from '@/shared/errors/http-errors';
 
-import { Config } from '../../config/env/get-env';
+import { getConfig } from '../../config/env/get-env';
 
-const config = new Config();
-
-const baseUrl = config.get('COGNITO_URL');
-const userPoolId = config.get('COGNITO_USER_POOL_ID');
-const clientId = config.get('COGNITO_CLIENT_ID');
-const adminGroup = config.get('COGNITO_ADMINS_GROUP_NAME');
+const baseUrl = getConfig('COGNITO_URL');
+const userPoolId = getConfig('COGNITO_USER_POOL_ID');
+const clientId = getConfig('COGNITO_CLIENT_ID');
+const adminGroup = getConfig('COGNITO_ADMINS_GROUP_NAME');
 
 const JWKS = createRemoteJWKSet(
-  new URL(`${baseUrl}/${userPoolId}/.well-known/jwks.json`),
+  new URL(`${baseUrl}/${userPoolId}/.well-known/jwks.json`)
 );
 
 interface DecodedTokenResult {
@@ -23,7 +21,7 @@ interface DecodedTokenResult {
 }
 
 export async function verifyToken(
-  authHeader?: string,
+  authHeader?: string
 ): Promise<DecodedTokenResult> {
   try {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -34,7 +32,7 @@ export async function verifyToken(
 
     const { payload } = await jwtVerify(token, JWKS, {
       issuer: `${baseUrl}/${userPoolId}`,
-      audience: clientId,
+      audience: clientId
     });
 
     const sub = payload.sub as string;
@@ -52,17 +50,17 @@ export async function verifyToken(
       Id,
       sub,
       email,
-      isAdmin,
+      isAdmin
     };
   } catch (err) {
     if (err instanceof Error && err.message.includes('exp')) {
       throw new UnauthorizedError(
-        'Token expirado. Faça login novamente para continuar.',
+        'Token expirado. Faça login novamente para continuar.'
       );
     }
 
     throw new UnauthorizedError(
-      err instanceof Error ? err.message : 'Token inválido ou expirado',
+      err instanceof Error ? err.message : 'Token inválido ou expirado'
     );
   }
 }

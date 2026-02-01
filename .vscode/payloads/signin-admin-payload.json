@@ -1,0 +1,9 @@
+{
+  "body": "{\"email\":\"admin_teste@mail.com\"}",
+  "httpMethod": "POST",
+  "path": "/api/v1/users/signin",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "isBase64Encoded": false
+}

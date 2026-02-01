@@ -4,28 +4,34 @@ import { envs } from './env';
 
 const envSchema = z.object(envs);
 
-export class Config {
-  private config: z.infer<typeof envSchema>;
+type EnvConfig = z.infer<typeof envSchema>;
 
-  constructor() {
-    const parsed = envSchema.safeParse(process.env);
+let configCache: EnvConfig | null = null;
 
-    if (!parsed.success) {
-      throw new Error(
-        `Invalid environment variables: ${JSON.stringify(parsed.error.format())}`,
-      );
-    }
+const loadConfig = (): EnvConfig => {
+  if (configCache) return configCache;
 
-    this.config = parsed.data;
+  const parsed = envSchema.safeParse(process.env);
+
+  if (!parsed.success) {
+    throw new Error(
+      `Invalid environment variables: ${JSON.stringify(parsed.error.format())}`
+    );
   }
 
-  get<Key extends keyof typeof envs>(env: Key): z.infer<typeof envSchema>[Key] {
-    const value = this.config[env];
+  configCache = parsed.data;
+  return configCache;
+};
 
-    if (value === undefined) {
-      throw new Error(`Environment variable ${String(env)} is not defined.`);
-    }
+export const getConfig = <Key extends keyof typeof envs>(
+  env: Key
+): EnvConfig[Key] => {
+  const config = loadConfig();
+  const value = config[env];
 
-    return value;
+  if (value === undefined) {
+    throw new Error(`Environment variable ${String(env)} is not defined.`);
   }
-}
+
+  return value;
+};
