@@ -10,7 +10,8 @@ import { AuthToken, authTokens } from '../../schemas';
 // Helper to convert AuthToken to AuthTokensData
 const authTokensData = (token: AuthToken): AuthTokensData => ({
   Id: token.id,
-  userId: token.userId,
+  userId: token.userId ?? null,
+  adminId: token.adminId ?? null,
   token: token.token,
   type: token.type ?? '',
   used: token.used ?? false,
@@ -48,13 +49,18 @@ const getLastLoginTokenCreatedAt = async (
   return result[0]?.createdAt ?? null;
 };
 
-const invalidateLoginCodes = async (userId: string): Promise<void> => {
+const invalidateLoginCodes = async (
+  userId: string,
+  isAdmin: boolean
+): Promise<void> => {
   await db
     .update(authTokens)
     .set({ used: true })
     .where(
       and(
-        eq(authTokens.userId, userId),
+        isAdmin
+          ? eq(authTokens.adminId, userId)
+          : eq(authTokens.userId, userId),
         eq(authTokens.type, 'login_code'),
         eq(authTokens.used, false)
       )
@@ -63,6 +69,7 @@ const invalidateLoginCodes = async (userId: string): Promise<void> => {
 
 const createAuthToken = async ({
   userId,
+  adminId,
   token,
   type,
   expiresAt
@@ -70,7 +77,8 @@ const createAuthToken = async ({
   const result = await db
     .insert(authTokens)
     .values({
-      userId,
+      userId: userId ?? null,
+      adminId: adminId ?? null,
       token,
       type,
       expiresAt,
@@ -81,9 +89,36 @@ const createAuthToken = async ({
   return result[0];
 };
 
+const findValidToken = async (
+  tokenValue: string
+): Promise<AuthToken | null> => {
+  const result = await db
+    .select()
+    .from(authTokens)
+    .where(
+      and(
+        eq(authTokens.token, tokenValue),
+        eq(authTokens.used, false),
+        gt(authTokens.expiresAt, sql`now()`)
+      )
+    )
+    .limit(1);
+
+  return result[0] ?? null;
+};
+
+const markTokenAsUsed = async (tokenValue: string): Promise<void> => {
+  await db
+    .update(authTokens)
+    .set({ used: true })
+    .where(eq(authTokens.token, tokenValue));
+};
+
 export {
   countRecentTokens,
   getLastLoginTokenCreatedAt,
   invalidateLoginCodes,
-  createAuthToken
+  createAuthToken,
+  findValidToken,
+  markTokenAsUsed
 };

@@ -141,3 +141,6 @@ terraform/**/terraform.tfstate.backup
 terraform/**/.terraform/
 terraform/**/terraform.tfplan
 terraform/**/.terraform.lock.hcl
+
+private.key
+public.key

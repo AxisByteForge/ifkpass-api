@@ -11,20 +11,41 @@ import { findUserByEmail } from '@/infra/database/repository/user/user-db.servic
 import { generateCode } from '@/shared/utils/generateCode';
 import { getTokenExpiresAt } from '@/shared/utils/getTokenExpiresAt';
 import { SigninInput, SigninOutput } from './signin.service.interface';
+import { findAdminByEmail } from '@/infra/database/repository/admins/admins-db.service';
+
+const isAdmin = async (email: string): Promise<any> => {
+  const admin = await findAdminByEmail(email);
+
+  if (!admin) {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      throw new UserNotFoundError(email);
+    }
+
+    return {
+      Id: user.Id,
+      email: user.email,
+      isAdmin: false
+    };
+  }
+
+  return {
+    Id: admin.Id,
+    email: admin.email,
+    isAdmin: true
+  };
+};
 
 export const signinUserService = async (
   input: SigninInput
 ): Promise<SigninOutput | TooManyTokensError> => {
-  const user = await findUserByEmail(input.email);
-
-  if (!user) {
-    throw new UserNotFoundError(input.email);
-  }
+  const user = await isAdmin(input.email);
 
   const recentTokenCount = await countRecentTokens(user.Id);
 
   if (recentTokenCount >= 2) {
-    const lastTokenDate = await getLastLoginTokenCreatedAt(user.Id);
+    const lastTokenDate = await getLastLoginTokenCreatedAt(user);
 
     if (lastTokenDate) {
       const retryAfter = new Date(lastTokenDate.getTime() + 60 * 1000); // +1 minute
@@ -32,12 +53,13 @@ export const signinUserService = async (
     }
   }
 
-  await invalidateLoginCodes(user.Id);
+  await invalidateLoginCodes(user.Id, user.isAdmin);
 
   const code = generateCode();
 
   await createAuthToken({
-    userId: user.Id,
+    userId: user.isAdmin ? null : user.Id,
+    adminId: user.isAdmin ? user.Id : null,
     token: code,
     type: 'login_code',
     expiresAt: getTokenExpiresAt()

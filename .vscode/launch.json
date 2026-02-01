@@ -44,9 +44,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -82,7 +79,29 @@
         "${workspaceFolder}/.vscode/payloads/signin-payload.json"
       ],
       "console": "integratedTerminal",
-      "preLaunchTask": "build:dev", 
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: Signin Admin",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/signin-admin-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js",
         "${workspaceFolder}/src/**/*.ts"
@@ -113,9 +132,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -138,9 +154,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",
@@ -163,9 +176,28 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Lambda: Authenticate Admin",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "tsx",
+        "--inspect-brk",
+        "${workspaceFolder}/scripts/local-lambda.ts",
+        "${workspaceFolder}/.vscode/payloads/authenticate-admin-payload.json"
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "build:dev",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/src/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
     },
     {
       "type": "node",
@@ -188,9 +220,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "env": {
-        "": "dev"
-      }
     },
     {
       "type": "node",

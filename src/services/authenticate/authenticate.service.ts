@@ -3,27 +3,87 @@ import {
   AuthenticateInput,
   AuthenticateOutput
 } from './authenticate.service.interface';
+import { UserNotFoundError } from '@/shared/errors/user-not-found-exception';
+import {
+  findValidToken,
+  markTokenAsUsed
+} from '@/infra/database/repository/authTokens/auth-tokens-db.service';
+import { TokenWasNotValidError } from '@/shared/errors/token-was-not-valid';
+import { generateAccessToken } from '@/infra/jwt/jwt.service';
+import { findAdminByEmail } from '@/infra/database/repository/admins/admins-db.service';
+
+const isAdmin = async (email: string): Promise<any> => {
+  const admin = await findAdminByEmail(email);
+
+  if (!admin) {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      throw new UserNotFoundError(email);
+    }
+
+    return {
+      Id: user.Id,
+      email: user.email,
+      isAdmin: false
+    };
+  }
+
+  return {
+    Id: admin.Id,
+    email: admin.email,
+    isAdmin: true
+  };
+};
 
 export const authenticate = async (
   input: AuthenticateInput
-): Promise<AuthenticateOutput> => {
-  const user = await findUserByEmail(input.email);
+): Promise<AuthenticateOutput | any> => {
+  const user = await isAdmin(input.email);
 
-  if (!user) {
-    throw new Error(`Usuário com email ${input.email} não encontrado`);
+  const code = input.code;
+
+  const authToken = await findValidToken(code);
+
+  if (!authToken) {
+    return {
+      statusCode: 401,
+      message: 'Token was not valid'
+    };
+  }
+
+  if (user.isAdmin) {
+    await markTokenAsUsed(code);
+
+    const token = generateAccessToken({
+      userId: user.Id,
+      email: user.email,
+      isAdmin: true
+    });
+
+    return {
+      statusCode: 200,
+      token
+    };
   }
 
   if (user.status === 'pending') {
-    throw new Error('Usuário ainda não foi aprovado');
+    return {
+      statusCode: 403,
+      message: 'User not approved yet'
+    };
   }
 
   if (user.status === 'rejected') {
-    throw new Error(
-      'Sua conta foi rejeitada por um administrador. Entre em contato para mais informações.'
-    );
+    return {
+      statusCode: 403,
+      message: 'User application was rejected'
+    };
   }
 
-  const token = 'ok';
+  await markTokenAsUsed(code);
+
+  const token = generateAccessToken({ userId: user.Id, email: user.email });
 
   return {
     statusCode: 200,

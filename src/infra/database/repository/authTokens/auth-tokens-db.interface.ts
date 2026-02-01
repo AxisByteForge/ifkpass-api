@@ -1,6 +1,7 @@
 export interface AuthTokensData {
   Id: string;
-  userId: string;
+  userId: string | null;
+  adminId: string | null;
   token: string;
   type: string;
   used: boolean;
@@ -9,7 +10,8 @@ export interface AuthTokensData {
 }
 
 export type CreateAuthTokenParams = {
-  userId: string;
+  userId?: string | null;
+  adminId?: string | null;
   token: string;
   type: string;
   expiresAt: Date;

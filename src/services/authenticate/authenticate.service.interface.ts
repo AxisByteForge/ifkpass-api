@@ -1,6 +1,6 @@
 export interface AuthenticateInput {
   email: string;
-  password: string;
+  code: string;
 }
 
 export interface AuthenticateOutput {

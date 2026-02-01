@@ -4,7 +4,7 @@ import { authenticate as authenticateService } from '@/services/authenticate/aut
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(1)
+  code: z.string().length(6)
 });
 
 const authenticate = async (
@@ -14,10 +14,7 @@ const authenticate = async (
     const body = schema.parse(JSON.parse(event.body || '{}'));
     const result = await authenticateService(body);
 
-    return {
-      statusCode: result.statusCode,
-      body: JSON.stringify({ token: result.token })
-    };
+    return result;
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
