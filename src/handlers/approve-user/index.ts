@@ -1,15 +1,16 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { z } from 'zod';
-import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+
 import {
   UnauthorizedError,
   ForbiddenException
 } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
 import { approveUser as approveUserService } from '@/services/approve-user/approve-user.service';
+import { verifyToken } from '@/infra/jwt/jwt.service';
 
 const schema = z.object({
-  Id: z.string(),
+  userId: z.string(),
   status: z.enum(['approved', 'rejected'])
 });
 
@@ -18,7 +19,7 @@ export const approveUser = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const headers = event.headers as Partial<RequestHeaders>;
-    const token = await verifyToken(headers.Authorization);
+    const token = await verifyToken(headers.Authorization ?? '');
 
     if (!token.isAdmin) {
       throw new ForbiddenException(
@@ -28,8 +29,7 @@ export const approveUser = async (
 
     const body = schema.parse(JSON.parse(event.body || '{}'));
     const result = await approveUserService({
-      adminId: token.Id,
-      Id: body.Id,
+      userId: body.userId,
       status: body.status
     });
 

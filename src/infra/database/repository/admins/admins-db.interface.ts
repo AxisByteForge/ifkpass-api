@@ -1,5 +1,5 @@
 export interface AdminsDbData {
-  Id: string;
+  id: string;
   name: string;
   lastName: string;
   email: string;

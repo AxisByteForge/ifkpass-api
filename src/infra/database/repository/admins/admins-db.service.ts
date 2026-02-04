@@ -5,7 +5,7 @@ import { Admin, admins, users } from '../../schemas';
 import { AdminsDbData } from './admins-db.interface';
 
 const userDbData = (admin: Admin): AdminsDbData => ({
-  Id: admin.id,
+  id: admin.id,
   name: admin.name || '',
   lastName: admin.lastName || '',
   email: admin.email || '',
@@ -29,7 +29,7 @@ export const findAdminByEmail = async (
 };
 
 export const updateUserStatus = async (
-  Id: string,
+  id: string,
   status: string
 ): Promise<void> => {
   await db
@@ -38,5 +38,5 @@ export const updateUserStatus = async (
       status,
       updatedAt: new Date()
     })
-    .where(eq(users.id, Id));
+    .where(eq(users.id, id));
 };

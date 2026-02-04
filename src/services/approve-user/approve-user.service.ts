@@ -10,19 +10,13 @@ import type {
 export const approveUser = async (
   input: ApproveUserInput
 ): Promise<ApproveUserOutput> => {
-  const admin = await findUserById(input.adminId);
-
-  if (!admin || !admin.isAdmin) {
-    throw new Error('Usuário não possui privilégios de administrador');
-  }
-
-  const user = await findUserById(input.Id);
+  const user = await findUserById(input.userId);
 
   if (!user) {
-    throw new Error(`Usuário com ID ${input.Id} não encontrado`);
+    throw new Error(`Usuário com ID ${input.userId} não encontrado`);
   }
 
-  await updateUserStatus(input.Id, input.status);
+  await updateUserStatus(input.userId, input.status);
 
   return {
     message: `User ${input.status === 'approved' ? 'approved' : 'rejected'} successfully`

@@ -1,6 +1,5 @@
 export interface ApproveUserInput {
-  adminId: string;
-  Id: string;
+  userId: string;
   status: 'approved' | 'rejected';
 }
 

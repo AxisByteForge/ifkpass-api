@@ -1,5 +1,5 @@
 export interface CreateProfileInput {
-  Id: string;
+  id: string;
   body: {
     birthDate: string;
     city: string;

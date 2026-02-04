@@ -1,15 +1,16 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+
 import { UnauthorizedError } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
 import { sendPhoto as sendPhotoService } from '@/services/send-photo/send-photo.service';
+import { verifyToken } from '@/infra/jwt/jwt.service';
 
 export const sendPhoto = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
     const headers = event.headers as Partial<RequestHeaders>;
-    const { Id } = await verifyToken(headers.Authorization);
+    const { Id } = await verifyToken(headers.Authorization ?? '');
 
     const result = await sendPhotoService({ Id });
 

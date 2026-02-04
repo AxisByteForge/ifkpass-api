@@ -1,9 +1,8 @@
 export interface UserDbData {
-  Id: string;
+  id: string;
   name: string;
   lastName: string;
   email: string;
-  isAdmin: boolean;
   status: string;
   createdAt: string;
   updatedAt: string;

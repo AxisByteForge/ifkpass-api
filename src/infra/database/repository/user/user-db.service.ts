@@ -6,11 +6,10 @@ import { User, users } from '../../schemas';
 
 // Helper to convert User to UserDbData
 const userDbData = (user: User): UserDbData => ({
-  Id: user.id,
+  id: user.id,
   name: user.name || '',
   lastName: user.lastName || '',
   email: user.email || '',
-  isAdmin: user.isAdmin || false,
   status: user.status || 'pending',
   createdAt: user.createdAt?.toISOString() || new Date().toISOString(),
   updatedAt: user.updatedAt?.toISOString() || new Date().toISOString(),
@@ -52,11 +51,10 @@ export const createUserInDb = async (
   data: Partial<UserDbData>
 ): Promise<void> => {
   const insertData = {
-    id: data.Id,
+    id: data.id,
     name: data.name || '',
     lastName: data.lastName || '',
     email: data.email || '',
-    isAdmin: data.isAdmin || false,
     status: data.status || 'pending',
     cpf: data.cpf,
     phone: data.phone,
@@ -76,7 +74,7 @@ export const createUserInDb = async (
 };
 
 export const updateUser = async (
-  Id: string,
+  id: string,
   data: Partial<UserDbData>
 ): Promise<void> => {
   // Build update object with only provided fields
@@ -86,7 +84,6 @@ export const updateUser = async (
   if (data.lastName !== undefined) updateData.lastName = data.lastName;
   if (data.email !== undefined) updateData.email = data.email;
   if (data.status !== undefined) updateData.status = data.status;
-  if (data.isAdmin !== undefined) updateData.isAdmin = data.isAdmin;
   if (data.cpf !== undefined) updateData.cpf = data.cpf;
   if (data.phone !== undefined) updateData.phone = data.phone;
   if (data.birthDate !== undefined)
@@ -105,7 +102,7 @@ export const updateUser = async (
 
   if (Object.keys(updateData).length === 0) return;
 
-  await db.update(users).set(updateData).where(eq(users.id, Id));
+  await db.update(users).set(updateData).where(eq(users.id, id));
 };
 
 export const updateUserStatus = async (

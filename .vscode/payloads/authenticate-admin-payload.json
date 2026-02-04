@@ -1,5 +1,5 @@
 {
-  "body": "{\"email\":\"admin_teste@mail.com\",\"code\":\"928525\"}",
+  "body": "{\"email\":\"admin_teste@mail.com\",\"code\":\"161828\"}",
   "httpMethod": "POST",
   "path": "/api/v1/users/auth",
   "headers": {

@@ -1,9 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { z } from 'zod';
-import { verifyToken } from '@/shared/lib/jwt/jose/jose.jwt';
+
 import { UnauthorizedError } from '@/shared/errors/http-errors';
 import { RequestHeaders } from '@/shared/types/headers.type';
 import { createProfile as createProfileService } from '@/services/create-profile/create-profile.service';
+import { verifyToken } from '@/infra/jwt/jwt.service';
 
 const schema = z.object({
   birthDate: z.string(),
@@ -19,10 +20,10 @@ export const createProfile = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const headers = event.headers as Partial<RequestHeaders>;
-    const { Id } = await verifyToken(headers.Authorization);
+    const { id } = await verifyToken(headers.Authorization ?? '');
 
     const body = schema.parse(JSON.parse(event.body || '{}'));
-    const result = await createProfileService({ Id, body });
+    const result = await createProfileService({ id, body });
 
     return {
       statusCode: 201,

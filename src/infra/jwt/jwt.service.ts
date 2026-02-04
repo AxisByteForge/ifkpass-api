@@ -2,7 +2,7 @@ import { getConfig } from '@/shared/lib/config/env/get-env';
 import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
-  userId: string;
+  id: string;
   email: string;
   [key: string]: any;
 }
@@ -54,7 +54,10 @@ const generateTokenPair = (payload: JwtPayload): TokenPair => {
 const verifyToken = (token: string): JwtPayload => {
   try {
     const publicKey = getPublicKey();
-    const decoded = jwt.verify(token, publicKey, {
+
+    const splitToken = token.split('Bearer ')[1] || token;
+
+    const decoded = jwt.verify(splitToken, publicKey, {
       algorithms: ['RS256']
     });
     return decoded as JwtPayload;
