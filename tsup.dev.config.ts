@@ -16,5 +16,6 @@ export default defineConfig({
     /@\/services\//,
     /@\/shared\//
   ],
-  tsconfig: './tsconfig.json'
+  tsconfig: './tsconfig.json',
+  onSuccess: 'tsc --noEmit'
 });

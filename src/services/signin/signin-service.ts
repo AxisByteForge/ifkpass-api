@@ -24,14 +24,14 @@ const isAdmin = async (email: string): Promise<any> => {
     }
 
     return {
-      Id: user.Id,
+      id: user.id,
       email: user.email,
       isAdmin: false
     };
   }
 
   return {
-    Id: admin.Id,
+    id: admin.id,
     email: admin.email,
     isAdmin: true
   };

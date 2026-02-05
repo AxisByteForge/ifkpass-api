@@ -1,23 +1,10 @@
 import { eq, and, gt, sql, desc } from 'drizzle-orm';
 import { db } from '@/shared/lib/db';
 
-import {
-  AuthTokensData,
-  CreateAuthTokenParams
-} from './auth-tokens-db.interface';
+import { CreateAuthTokenParams } from './auth-tokens-db.interface';
 import { AuthToken, authTokens } from '../../schemas';
 
 // Helper to convert AuthToken to AuthTokensData
-const authTokensData = (token: AuthToken): AuthTokensData => ({
-  Id: token.id,
-  userId: token.userId ?? null,
-  adminId: token.adminId ?? null,
-  token: token.token,
-  type: token.type ?? '',
-  used: token.used ?? false,
-  expiresAt: token.expiresAt ?? new Date(),
-  createdAt: token.createdAt ?? new Date()
-});
 
 const countRecentTokens = async (userId: string): Promise<number> => {
   const result = await db

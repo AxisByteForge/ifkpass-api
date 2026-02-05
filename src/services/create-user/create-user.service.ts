@@ -18,11 +18,10 @@ const createUser = async (
   const userId = randomUUID();
 
   await createUserInDb({
-    Id: userId,
+    id: userId,
     name: input.name,
     lastName: input.lastName,
     email: input.email,
-    isAdmin: input.isAdmin ?? false,
     status: 'pending'
   });
 
